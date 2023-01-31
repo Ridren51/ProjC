@@ -18,9 +18,7 @@ EasySave is a backup solution developed by the ProSoft4 team for Windows users. 
 - Backup hardware (Virtual/External hard disk..)
 
 
-
-
-##GIT Naming Convention
+## GIT Naming Convention 
 We use the following convention : https://www.conventionalcommits.org/en/v1.0.0/
 
 fix(vue) in case we fix a bug
@@ -31,8 +29,7 @@ In the case of a breaking chancge composed of a fix or a structural element you 
 fix!(vue): Comment
 
 
-
-##Code Naming Convention :
+## Code Naming Convention :
 We use the following convention : https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
 
 Camel Case (camelCase): In this standard, the first letter of the word always in small letter and after that each word starts with a capital letter.
