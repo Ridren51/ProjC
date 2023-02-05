@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace EasySave_CLI.Model
 {
-    internal class DailyLog : ILog
+    internal class DailyLog : Log
     {
-        public void createLog()
+        public override Type LogType => typeof(DailyLog);
+        public DailyLog()
         {
-            throw new NotImplementedException();
+            _logPath = "D:\\daily.json";
         }
 
-        public void updateLog()
+        public override void UpdateLog(ITransferFile file)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(_logPath))
+                this.CreateLogFile();
+            using (StreamWriter sw = new StreamWriter(_logPath, true))
+            {
+                sw.WriteLine(this.getLogJSON(file));
+                sw.Close();
+            }
         }
+
     }
 }
