@@ -23,7 +23,8 @@ namespace EasySave_CLI.Model
         public void doBackupJob()
         {
             try
-            {
+            {   
+
                 Console.WriteLine("Do you want to make a backup? (Y/N)");
                 string answer = Console.ReadLine();
 
@@ -76,18 +77,18 @@ namespace EasySave_CLI.Model
                 string TargetFile = Path.Combine(target.FullName, file.Name);
 
 
-                if (System.IO.File.ReadAllBytes(TargetFile) == System.IO.File.ReadAllBytes(SourceFile))
+                if (System.IO.File.Exists(TargetFile) == System.IO.File.Exists(SourceFile))
                 {
                     Console.WriteLine("The file " + Name + " already exists and is up to date");
                 }
-                else if (System.IO.File.ReadAllBytes(TargetFile) != System.IO.File.ReadAllBytes(SourceFile))
+                /*else if (System.IO.File.Exists(target.FullName) == System.IO.File.Exists(source.FullName) && System.IO.File.ReadAllBytes(TargetFile) != System.IO.File.ReadAllBytes(SourceFile))
                 {
                     var stopwatch = Stopwatch.StartNew();
                     Console.WriteLine("The file " + Name + " is updating");
                     System.IO.File.Delete(TargetFile);
                     System.IO.File.Copy(SourceFile, TargetFile, true);
                     stopwatch.Stop();
-                }
+                }*/
                 else
                 {
                     CopyDirectory(SourceDirectory, TargetDirectory, Name);
