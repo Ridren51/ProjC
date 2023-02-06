@@ -9,7 +9,6 @@ namespace EasySave_CLI.Model
     internal interface IRealTimeLog : ILog
     {
         bool State { get; set; }
-        public int _totalFilesSize { get; set; }
 
     }
 }

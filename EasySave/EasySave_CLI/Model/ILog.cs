@@ -8,8 +8,7 @@ namespace EasySave_CLI.Model
 {
     internal interface ILog
     {
-        public IFile File { get; set; }
         public void createLog();
-        public void updateLog(IFile file);
+        public void updateLog();
     }
 }
