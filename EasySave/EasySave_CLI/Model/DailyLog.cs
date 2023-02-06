@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySave_CLI.Model
 {
+    /*
     internal class DailyLog : ILog
     {
         public IFile File { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -25,4 +26,5 @@ namespace EasySave_CLI.Model
             throw new NotImplementedException();
         }
     }
+    */
 }

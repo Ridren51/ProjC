@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySave_CLI.Model
 {
+    /*
     internal class RealTimeLog : IRealTimeLog
     {
         public bool State 
@@ -32,4 +33,5 @@ namespace EasySave_CLI.Model
             throw new NotImplementedException();
         }
     }
+    */
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySave_CLI.Model
 {
+    /*
     internal class Logger
     {
         private readonly string name;
@@ -22,4 +23,5 @@ namespace EasySave_CLI.Model
             realTimeLog = new RealTimeLog();
         }
     }
+    */
 }
