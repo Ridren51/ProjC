@@ -45,7 +45,7 @@ namespace EasySave_CLI.View
                 {
                     RunAllBackups();
                 }
-                else if (input == "languages")
+                else if (input == "language")
                 {
                     ChangeLanguage();
                 }
@@ -114,9 +114,10 @@ namespace EasySave_CLI.View
             {
                 logThread.Join();
             }
-
-            //TODO: fix bug where you can't change logtime twice
-            cancellationTokenSource.Dispose();
+            if(cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Dispose();
+            }
             cancellationTokenSource = new CancellationTokenSource();
             cancellationTokenSource.TryReset();
             cancellationToken = cancellationTokenSource.Token;
