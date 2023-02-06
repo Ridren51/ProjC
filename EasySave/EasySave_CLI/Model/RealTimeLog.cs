@@ -14,12 +14,20 @@ namespace EasySave_CLI.Model
             set { State = value; }
         }
 
+        public int _totalFilesSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IFile File { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public void createLog()
         {
             throw new NotImplementedException();
         }
 
         public void updateLog()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void updateLog(IFile file)
         {
             throw new NotImplementedException();
         }

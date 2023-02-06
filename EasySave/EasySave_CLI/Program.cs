@@ -1,2 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System;
+using System.IO;
+using System.Threading;
+using System.Xml.Schema;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace ConsoleBackupApp
+{
+    class Program
+    {
+
+        
+    }
+}
