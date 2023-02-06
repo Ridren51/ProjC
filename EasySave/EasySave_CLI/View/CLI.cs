@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace EasySave_CLI.View
 {
+    /*
     internal class CLI
     {
         static CancellationTokenSource? cancellationTokenSource;
@@ -161,5 +162,5 @@ namespace EasySave_CLI.View
             }
         }
     }
-    
+    */
 }
