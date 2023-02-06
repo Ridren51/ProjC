@@ -1,2 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using EasySave_CLI.Model;
+using System;
+
+BackupJob init = new BackupJob();
+init.doBackupJob();
