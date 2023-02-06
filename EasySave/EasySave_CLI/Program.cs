@@ -9,7 +9,10 @@ namespace ConsoleBackupApp
 {
     class Program
     {
-
-        
+        static void Main(string[] args)
+        {
+            App myApp = new App();
+            myApp.Start();
+        }
     }
 }
