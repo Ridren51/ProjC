@@ -9,16 +9,19 @@ namespace EasySave_CLI.View
 {
     internal class CLI
     {
+        static CancellationTokenSource? cancellationTokenSource;
+        static Thread? logThread;
+        static CancellationToken cancellationToken;
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to EasySave CLI");
             Console.WriteLine("Enter 'help' to show every EasySave CLI commands");
 
             
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            CancellationToken cancellationToken = cancellationTokenSource.Token;
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
             // Default value for the hour of the created log is set here
-            Thread logThread = new Thread(() => CreateLog(cancellationToken, new TimeSpan(12, 00, 0)));
+            logThread = new Thread(() => CreateLog(cancellationToken, new TimeSpan(12, 00, 0)));
             logThread.Start();
 
             bool continueLoop = true;
@@ -48,7 +51,7 @@ namespace EasySave_CLI.View
                 }
                 else if (input == "logtime")
                 {
-                    ChangeLogTime(cancellationTokenSource, cancellationToken, logThread);
+                    ChangeLogTime();
                 }
                 else if (input == "help")
                 {
@@ -87,7 +90,7 @@ namespace EasySave_CLI.View
             //TODO : Code pour lancer tous les backups ici
         }
 
-        private static void ChangeLogTime(CancellationTokenSource cancellationTokenSource, CancellationToken cancellationToken, Thread logThread)
+        private static void ChangeLogTime()
         {
             int logHour = -1;
             Console.WriteLine("Enter the hour at which the log should be created:");
@@ -103,10 +106,19 @@ namespace EasySave_CLI.View
                 Console.WriteLine("Please enter a number between 0 and 59");
             }
 
-            cancellationTokenSource.Cancel();
-            logThread.Join();
+            if(cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+            }
+            if(logThread!= null)
+            {
+                logThread.Join();
+            }
+
+            //TODO: fix bug where you can't change logtime twice
             cancellationTokenSource.Dispose();
             cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.TryReset();
             cancellationToken = cancellationTokenSource.Token;
             logThread = new Thread(() => CreateLog(cancellationToken, new TimeSpan(logHour, logMinute, 0)));
             logThread.Start();
