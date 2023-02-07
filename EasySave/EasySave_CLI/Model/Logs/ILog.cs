@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave_CLI.Model
+namespace EasySave_CLI.Model.Logs
 {
     internal interface ILog
     {

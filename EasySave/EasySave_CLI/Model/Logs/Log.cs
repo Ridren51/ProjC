@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace EasySave_CLI.Model
+namespace EasySave_CLI.Model.Logs
 {
     public abstract class Log : ILog
     {
@@ -24,9 +24,9 @@ namespace EasySave_CLI.Model
         protected string getLogJSON(ITransferFile file)
         {
             JsonLog jsonLog;
-            jsonLog = LogType == typeof(RealTimeLog) ? jsonLog = new JsonLog(file, this as RealTimeLog) : jsonLog = new JsonLog(file, this as DailyLog);
+            jsonLog = LogType == typeof(RealTimeLog) ? jsonLog = new JsonLog(file, (RealTimeLog)this) : jsonLog = new JsonLog(file, (DailyLog)this);
             JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull };
-            string jsonString = System.Text.Json.JsonSerializer.Serialize(jsonLog, options);
+            string jsonString = JsonSerializer.Serialize(jsonLog, options);
             return jsonString;
         }
     }
