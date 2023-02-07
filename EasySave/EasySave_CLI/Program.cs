@@ -15,7 +15,9 @@ namespace EasySave_CLI.Model
         static void Main(string[] args)
         {
             BackupJob init = new BackupJob("coucou","CC");
-            init.doJob("D:\\BACK\\1", "D:\\BACK\\2");
+            //init.doBackup("D:\\BACK\\1", "D:\\BACK\\2");
+            init.SetTime(1);
+            init.doDifferiencialBackup("D:\\BACK2\\1", "D:\\BACK2\\2");
         }
     }
 }
