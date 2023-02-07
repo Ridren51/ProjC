@@ -7,6 +7,7 @@ using System.Resources;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 using EasySave_CLI.Model;
 
@@ -22,27 +23,24 @@ namespace EasySave_CLI.Model
             _name = name;
             Type = type;
         }
-        public void doJob(string SourceDirectory, string TargetDirectory)
+
+        public void doDifferiencialBackup(string SourceDirectory, string TargetDirectory, int delayInHour)
+        {
+
+        }
+        public void doBackup(string SourceDirectory, string TargetDirectory)
         {
             CompareFiles(SourceDirectory, TargetDirectory);
             CopyDirectory(SourceDirectory, TargetDirectory, this._name);
         }
-                 /*
-                Console.WriteLine("Do you want to make a backup? (Y/N)");
 
-                Console.WriteLine("Enter the path of the folder to be backed up:");
-
-                Console.WriteLine("The specified folder does not exist.");
- 
-                Console.WriteLine("Enter the path of the backup folder:");
-                */
 
         private string GetFileSourcePath(DirectoryInfo sourceDirectoryInfo, DirectoryInfo targetDirectoryInfo, FileInfo file)
         {
             return Path.Combine(sourceDirectoryInfo.FullName, file.Name);
         }
         private string GetFileTargetPath(DirectoryInfo sourceDirectoryInfo, DirectoryInfo targetDirectoryInfo, FileInfo file)
-        { 
+        {
             return Path.Combine(targetDirectoryInfo.FullName, file.Name);
         }
 
@@ -55,35 +53,39 @@ namespace EasySave_CLI.Model
             {
 
                 if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) == File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
-                    continue;
-
-                /*else if (System.IO.File.Exists(target.FullName) == System.IO.File.Exists(source.FullName) && System.IO.File.ReadAllBytes(TargetFile) != System.IO.File.ReadAllBytes(SourceFile))
                 {
-                    var stopwatch = Stopwatch.StartNew();
-                    Console.WriteLine("The file " + Name + " is updating");
-                    System.IO.File.Delete(TargetFile);
-                    System.IO.File.Copy(SourceFile, TargetFile, true);
-                    stopwatch.Stop();
-                }*/
-                else if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                    if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
+                    {
+                        CopyDirectory(SourceDirectory, TargetDirectory, file.Name);
+                    }
+                }
+                   else if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
                     CopyDirectory(SourceDirectory, TargetDirectory, file.Name);
-                else
-                    Console.WriteLine("Error");
             }
         }
 
-        private bool CompareHash(string SourceDirectory, string TargetDirectory)
+        private static byte[] GetFileHash(string file, SHA256 sha256Hash)
         {
-            DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(SourceDirectory);
-            DirectoryInfo targetDirectoryInfo = new DirectoryInfo(TargetDirectory);
+            using (FileStream stream = File.OpenRead(file))
+            {
+                return sha256Hash.ComputeHash(stream);
+            }
+        }
 
+        private bool CompareHash(DirectoryInfo SourceDirectory, DirectoryInfo TargetDirectory, FileInfo file)
+        {
+            string sourceFilePath = GetFileSourcePath(SourceDirectory, TargetDirectory, file);
+            string targetFilePath = GetFileTargetPath(SourceDirectory, TargetDirectory, file);
 
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] sourceFileHash = GetFileHash(sourceFilePath, sha256Hash);
+                byte[] targetFileHash = GetFileHash(targetFilePath, sha256Hash);
 
-            if (1 == 1)
-                return true;
-            else
-                return false;
-
+                if (!sourceFileHash.SequenceEqual(targetFileHash))
+                    return false;
+            }
+            return true;
         }
 
         private void CopyDirectory(string SourceDirectory, string TargetDirectory, string Name)
@@ -99,10 +101,11 @@ namespace EasySave_CLI.Model
             foreach (FileInfo file in source.GetFiles(Name))
             {
                 var stopwatch = Stopwatch.StartNew();
-                file.CopyTo(Path.Combine(target.FullName, file.Name));
+                file.CopyTo(Path.Combine(target.FullName, file.Name),true);
                 Name = file.Name;
                 DateTime Date = DateTime.Now;
                 stopwatch.Stop();
+                
                 Console.WriteLine("- " + Name + " : " + Date.ToString() + " - " + +stopwatch.Elapsed.Seconds + " seconds");
             }
 
