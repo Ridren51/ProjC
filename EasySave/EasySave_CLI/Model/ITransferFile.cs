@@ -11,7 +11,7 @@ namespace EasySave_CLI.Model
         public string Name { get; set; }
         public string SourcePath { get; set; }
         public string TargetPath { get; set; }
-        public int Size { get; set; }
+        public long Size { get; set; }
         public double? TransferTime { get; set; }
 
     }
