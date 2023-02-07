@@ -1,34 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace EasySave_CLI.Model
 {
-    /*
-    internal class RealTimeLog : IRealTimeLog
+    public class RealTimeLog : Log
     {
-        public bool State 
+        public override Type LogType => typeof(RealTimeLog); 
+        private string _state;
+        private int _totalFilesSize;
+        private int _totalFiles;
+        private int _filesLeft;
+        public string State { get { return _state; } set { _state = value; } }
+        public int TotalFiles { get { return _totalFiles; } set { _totalFiles = value; } }
+        public int TotalFilesSize { get { return _totalFilesSize; } set { _totalFilesSize = value; } }
+        public int FilesLeft { get { return _filesLeft; } set { _filesLeft = value; } }
+
+        public RealTimeLog(int totalFilesSize, int totalFiles)
         {
-            get { return State; }
-            set { State = value; }
+            _state = "INACTIVE";
+            _totalFilesSize = totalFilesSize;
+            _totalFiles = totalFiles;
+            _filesLeft = totalFiles;
+            _logPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+                "\\state--" + DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss") + ".json";
         }
 
-        public int _totalFilesSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IFile File { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public void createLog()
+        public override void UpdateLog(ITransferFile file)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(_logPath))
+                this.CreateLogFile();
+            if (_filesLeft > 1)
+                State = "ACTIVE";
+            else
+                State = "END";
+            using (StreamWriter sw = new StreamWriter(_logPath, true))
+            {
+                sw.WriteLine(this.getLogJSON(file));
+            }
+            FilesLeft--;
         }
 
         public void updateLog()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void updateLog(IFile file)
         {
             throw new NotImplementedException();
         }

@@ -8,7 +8,6 @@ namespace EasySave_CLI.Model
 {
     internal interface ILog
     {
-        public void createLog();
-        public void updateLog();
+        public void UpdateLog(ITransferFile file);
     }
 }
