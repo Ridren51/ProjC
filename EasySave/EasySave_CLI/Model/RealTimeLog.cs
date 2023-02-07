@@ -38,6 +38,10 @@ namespace EasySave_CLI.Model
             }
             FilesLeft--;
         }
-       
+
+        public void updateLog()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
