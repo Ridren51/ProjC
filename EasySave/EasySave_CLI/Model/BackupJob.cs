@@ -36,14 +36,14 @@ namespace EasySave_CLI.Model
         }
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            
+            //APPEL DE METHODE DO DIFFERENTIAL
         }
 
-        public async void doDifferiencialBackup(string SourceDirectory, string TargetDirectory)
+        private async void doDifferiencialBackup(string SourceDirectory, string TargetDirectory)
         {
             await Task.Run(() =>
             {
-
+                doBackup(SourceDirectory, TargetDirectory);
             });
         }
         public async void doBackup(string SourceDirectory,string TargetDirectory)
