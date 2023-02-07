@@ -12,8 +12,8 @@ namespace EasySave_CLI.Model
         public string SourcePath { get; set; }
         public string TargetPath { get; set; }
         public int Size { get; set; }
-        public double TransferTime { get; set; }
-        public TransferFile(string name, string sourcePath, string targetPath, int size, double TransferTime)
+        public double? TransferTime { get; set; }
+        public TransferFile(string name, string sourcePath, string targetPath, int size, double? TransferTime)
         {
             this.Name=name;
             this.SourcePath=sourcePath;
