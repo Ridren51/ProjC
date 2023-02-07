@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace EasySave_CLI.Model
 {
-    internal interface IFile
+    public interface ITransferFile
     {
         public string Name { get; set; }
         public string SourcePath { get; set; }
         public string TargetPath { get; set; }
         public int Size { get; set; }
+        public double? TransferTime { get; set; }
 
     }
 }
