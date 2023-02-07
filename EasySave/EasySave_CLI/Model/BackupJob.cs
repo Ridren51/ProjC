@@ -10,29 +10,68 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Xml.Linq;
 using EasySave_CLI.Model;
+using System.Timers;
+using System.Threading;
 
 namespace EasySave_CLI.Model
 {
-    internal class BackupJob
+    internal class BackupJob : IBackupJob
     {
         private string _name;
+        static System.Timers.Timer timer;
         string Type { get; set; }
 
         public BackupJob(string name, string type)
         {
             _name = name;
-            Type = type;
+           Type = type;
         }
 
-        public void doDifferiencialBackup(string SourceDirectory, string TargetDirectory, int delayInHour)
+        
+        public void SetTime(int interval)
         {
+            timer = new System.Timers.Timer(interval);
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
+        }
+        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            
+        }
 
-        }
-        public void doBackup(string SourceDirectory, string TargetDirectory)
+        public async void doDifferiencialBackup(string SourceDirectory, string TargetDirectory)
         {
-            CompareFiles(SourceDirectory, TargetDirectory);
-            CopyDirectory(SourceDirectory, TargetDirectory, this._name);
+            await Task.Run(() =>
+            {
+
+            });
         }
+        public async void doBackup(string SourceDirectory,string TargetDirectory)
+        {
+            await Task.Run(() =>
+            {
+                {
+                    DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(SourceDirectory);
+                    DirectoryInfo targetDirectoryInfo = new DirectoryInfo(TargetDirectory);
+
+                    foreach (FileInfo file in sourceDirectoryInfo.GetFiles())
+                    {
+
+                        if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) == File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                        {
+                            if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
+                            {
+                                CopyDirectory(SourceDirectory, TargetDirectory, file.Name);
+                            }
+                        }
+                        else if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                            CopyDirectory(SourceDirectory, TargetDirectory, file.Name);
+                            Console.WriteLine("pfeffsv");
+                    }
+                }
+            });
+        }
+
 
 
         private string GetFileSourcePath(DirectoryInfo sourceDirectoryInfo, DirectoryInfo targetDirectoryInfo, FileInfo file)
@@ -42,26 +81,6 @@ namespace EasySave_CLI.Model
         private string GetFileTargetPath(DirectoryInfo sourceDirectoryInfo, DirectoryInfo targetDirectoryInfo, FileInfo file)
         {
             return Path.Combine(targetDirectoryInfo.FullName, file.Name);
-        }
-
-        private void CompareFiles(string SourceDirectory, string TargetDirectory)
-        {
-            DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(SourceDirectory);
-            DirectoryInfo targetDirectoryInfo = new DirectoryInfo(TargetDirectory);
-
-            foreach (FileInfo file in sourceDirectoryInfo.GetFiles())
-            {
-
-                if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) == File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
-                {
-                    if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
-                    {
-                        CopyDirectory(SourceDirectory, TargetDirectory, file.Name);
-                    }
-                }
-                   else if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
-                    CopyDirectory(SourceDirectory, TargetDirectory, file.Name);
-            }
         }
 
         private static byte[] GetFileHash(string file, SHA256 sha256Hash)
