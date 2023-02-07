@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave_CLI.Model
+namespace EasySave_CLI.Model.Logs
 {
     internal class JsonLog
     {
@@ -30,7 +30,7 @@ namespace EasySave_CLI.Model
             State = log.State;
             TotalFilesToCopy = log.TotalFiles;
             NbFilesLeftToDo = log.FilesLeft;
-            Progression = 100 - ((NbFilesLeftToDo - 1) * 100) / TotalFilesToCopy;
+            Progression = 100 - (NbFilesLeftToDo - 1) * 100 / TotalFilesToCopy;
             Time = DateTime.Now.ToString(_dateFormat);
         }
         public JsonLog(ITransferFile file, DailyLog log)
