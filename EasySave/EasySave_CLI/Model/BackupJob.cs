@@ -79,7 +79,7 @@ namespace EasySave_CLI.Model
 
 
 
-            if ()
+            if (1 == 1)
                 return true;
             else
                 return false;
