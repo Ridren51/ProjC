@@ -11,11 +11,11 @@ namespace EasySave_CLI.Model.Logs
         public string Name { get; set; }
         public string SourceFilePath { get; set; }
         public string TargetFilePath { get; set; }
-        public int? FileSize { get; set; }
+        public long? FileSize { get; set; }
         public double? FileTransferTime { get; set; }
         public string? State { get; set; }
         public int? TotalFilesToCopy { get; set; }
-        public int? TotalFilesSize { get; set; }
+        public long? TotalFilesSize { get; set; }
         public int? NbFilesLeftToDo { get; set; }
         public int? Progression { get; set; }
         private string _dateFormat = "dd/MM/yyyy HH:mm:ss";

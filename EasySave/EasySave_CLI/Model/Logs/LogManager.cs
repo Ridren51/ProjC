@@ -10,7 +10,7 @@ namespace EasySave_CLI.Model.Logs
     {
         private static DailyLog dailyLog = new DailyLog();
 
-        public static RealTimeLog GetNewRealTimeLog(int totalFilesSize, int totalFiles)
+        public static RealTimeLog GetNewRealTimeLog(long totalFilesSize, int totalFiles)
         {
             return new RealTimeLog(totalFilesSize, totalFiles);
         }
