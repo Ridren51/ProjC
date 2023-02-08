@@ -22,38 +22,18 @@ namespace EasySave_CLI.Model
         static System.Timers.Timer timer;
         private string _sourceDirectory;
         private string _targetDirectory;
-        public string Type { get; set; }
-        private int? _delay;
-        public BackupJob(string name, string sourceDirectory, string targetDirectory, string type, int? delay = 0)
+        public BackupEnum Type { get; set; }
+        public BackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
             _name = name;
             _sourceDirectory = sourceDirectory;
             _targetDirectory = targetDirectory;
             Type = type;
-            _delay = delay;
         }
 
         public override string ToString()
         {
             return this._name;
-        }
-
-        public void SetTime(int interval)
-        {
-            timer = new System.Timers.Timer(interval);
-            timer.Elapsed += Timer_Elapsed;
-            timer.Start();
-        }
-        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            
-        }
-
-        public async Task DoDifferiencialBackup()
-        {
-            await Task.Run(() =>
-            {
-            });
         }
         public async Task DoBackup()
         {
@@ -62,19 +42,18 @@ namespace EasySave_CLI.Model
                 {
                     DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(_sourceDirectory);
                     DirectoryInfo targetDirectoryInfo = new DirectoryInfo(_targetDirectory);
-
+                    Boolean isComplete = this.Type == BackupEnum.Full;
                     foreach (FileInfo file in sourceDirectoryInfo.GetFiles())
                     {
-
-                        if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) == File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
-                        {
-                            if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
-                            {
-                                CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
-                            }
-                        }
-                        else if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                        if (isComplete && File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
                             CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
+                        else
+                        {
+                            if (File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                                CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
+                            else if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
+                                CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
+                        }
                     }
                 }
             });
@@ -144,7 +123,7 @@ namespace EasySave_CLI.Model
                 Name = file.Name;
                 DateTime Date = DateTime.Now;
                 stopwatch.Stop();
-                realtimeLog.UpdateLog(new TransferFile(file.Name, fileSourcePath, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds));
+                realtimeLog.UpdateLog(new TransferFile(this._name, fileSourcePath, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds));
                 Console.WriteLine("- " + Name + " : " + Date.ToString() + " - " + +stopwatch.Elapsed.Seconds + " seconds");
             }
 
