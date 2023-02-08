@@ -8,7 +8,7 @@ namespace EasySave_CLI.Model
 {
     public interface ITransferFile
     {
-        public string Name { get; set; }
+        public string BackupName { get; set; }
         public string SourcePath { get; set; }
         public string TargetPath { get; set; }
         public long Size { get; set; }
