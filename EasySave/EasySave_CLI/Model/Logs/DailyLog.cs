@@ -13,7 +13,7 @@ namespace EasySave_CLI.Model.Logs
         public DailyLog()
         {
             _logPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                "\\daily--" + DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss") + ".json";
+                "\\daily.json";
         }
 
         public override void UpdateLog(ITransferFile file)

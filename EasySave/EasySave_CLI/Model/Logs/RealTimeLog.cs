@@ -21,7 +21,7 @@ namespace EasySave_CLI.Model.Logs
             _totalFiles = totalFiles;
             _filesLeft = totalFiles;
             _logPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                "\\state--" + DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss") + ".json";
+                "\\state.json";
         }
 
         public override void UpdateLog(ITransferFile file)
