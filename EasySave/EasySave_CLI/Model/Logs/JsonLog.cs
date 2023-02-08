@@ -23,7 +23,7 @@ namespace EasySave_CLI.Model.Logs
 
         public JsonLog(ITransferFile file, RealTimeLog log)
         {
-            Name = file.Name;
+            Name = file.BackupName;
             SourceFilePath = file.SourcePath;
             TargetFilePath = file.TargetPath;
             TotalFilesSize = log.TotalFilesSize;
@@ -35,7 +35,7 @@ namespace EasySave_CLI.Model.Logs
         }
         public JsonLog(ITransferFile file, DailyLog log)
         {
-            Name = file.Name;
+            Name = file.BackupName;
             SourceFilePath = file.SourcePath;
             TargetFilePath = file.TargetPath;
             FileSize = file.Size;
