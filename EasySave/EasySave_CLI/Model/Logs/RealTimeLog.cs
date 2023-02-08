@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
 
-namespace EasySave_CLI.Model
+namespace EasySave_CLI.Model.Logs
 {
     public class RealTimeLog : Log
     {
-        public override Type LogType => typeof(RealTimeLog); 
+        public override Type LogType => typeof(RealTimeLog);
         private string _state;
         private int _totalFilesSize;
         private int _totalFiles;
@@ -20,21 +20,21 @@ namespace EasySave_CLI.Model
             _totalFilesSize = totalFilesSize;
             _totalFiles = totalFiles;
             _filesLeft = totalFiles;
-            _logPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+            _logPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
                 "\\state--" + DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss") + ".json";
         }
 
         public override void UpdateLog(ITransferFile file)
         {
             if (!File.Exists(_logPath))
-                this.CreateLogFile();
+                CreateLogFile();
             if (_filesLeft > 1)
                 State = "ACTIVE";
             else
                 State = "END";
             using (StreamWriter sw = new StreamWriter(_logPath, true))
             {
-                sw.WriteLine(this.getLogJSON(file));
+                sw.WriteLine(getLogJSON(file));
             }
             FilesLeft--;
         }
@@ -44,4 +44,5 @@ namespace EasySave_CLI.Model
             throw new NotImplementedException();
         }
     }
+
 }

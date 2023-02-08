@@ -8,8 +8,7 @@ namespace EasySave_CLI.Model
 {
     internal interface IBackupJob
     {
-      public void setTime(int interval);
-      public void doBackup(string SourceDirectory, string TargetDirectory);
-      public void doDifferiencialBackup(string SourceDirectory, string TargetDirectory, int delayInHour);
+      public void DoBackup();
+      public void DoDifferiencialBackup(int delayInHour);
     }
 }

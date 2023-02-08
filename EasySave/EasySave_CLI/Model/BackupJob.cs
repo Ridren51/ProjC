@@ -19,12 +19,13 @@ namespace EasySave_CLI.Model
     {
         private string _name;
         static System.Timers.Timer timer;
-        string Type { get; set; }
-
-        public BackupJob(string name, string type)
+        private string _sourceDirectory;
+        private string _targetDirectory;
+        public BackupJob(string name, string sourceDirectory, string targetDirectory)
         {
             _name = name;
-           Type = type;
+            _sourceDirectory = sourceDirectory;
+            _targetDirectory = targetDirectory;
         }
 
         
@@ -39,20 +40,20 @@ namespace EasySave_CLI.Model
             //APPEL DE METHODE DO DIFFERENTIAL
         }
 
-        private async void doDifferiencialBackup(string SourceDirectory, string TargetDirectory)
+        public async void DoDifferiencialBackup(int delayIntHour)
         {
             await Task.Run(() =>
             {
                 doBackup(SourceDirectory, TargetDirectory);
             });
         }
-        public async void doBackup(string SourceDirectory,string TargetDirectory)
+        public async void DoBackup()
         {
             await Task.Run(() =>
             {
                 {
-                    DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(SourceDirectory);
-                    DirectoryInfo targetDirectoryInfo = new DirectoryInfo(TargetDirectory);
+                    DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(_sourceDirectory);
+                    DirectoryInfo targetDirectoryInfo = new DirectoryInfo(_targetDirectory);
 
                     foreach (FileInfo file in sourceDirectoryInfo.GetFiles())
                     {
@@ -61,11 +62,11 @@ namespace EasySave_CLI.Model
                         {
                             if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
                             {
-                                CopyDirectory(SourceDirectory, TargetDirectory, file.Name);
+                                CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
                             }
                         }
                         else if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
-                            CopyDirectory(SourceDirectory, TargetDirectory, file.Name);
+                            CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
                             Console.WriteLine("pfeffsv");
                     }
                 }
