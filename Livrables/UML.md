@@ -27,3 +27,26 @@ gantt
         section Phase 3 / Soutenance
         Powerpoint preparation:22-02-2023, 2d
         Deliverable 4 :crit, 24-0
+```
+``` mermaid
+sequenceDiagram
+    
+    User->>+View:Launch Application
+    View->>+ViewModel:Set Default Language
+    ViewModel->>+ConsoleLanguage:Get Text 
+    ConsoleLanguage->>+ViewModel:Reply Text
+    ViewModel->>+View:Reply Text in Language
+    View->>+User:Show Text
+    User->>+View:User Input
+    View->>+ViewModel:Send User Input
+    ViewModel->>+BackupJob:Request new BackupJob
+    BackupJob->>+LogManager:Request new LogManager
+    LogManager->>+RealTimeLog:Request new RealTimeLog
+    RealTimeLog->>+LogManager:Reply RealTimeLog
+    LogManager->>+DailyLog:Request Daily Log every 24h
+    LogManager->>+BackupJob:Reply LogManager
+    BackupJob->>+ViewModel:Reply BackupJob
+    ViewModel->>+View:Reply View
+```
+
+
