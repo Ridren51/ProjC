@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using EasySave_CLI.Model;
 using System.Timers;
 using System.Threading;
+using EasySave_CLI.Model.Logs;
 
 namespace EasySave_CLI.Model
 {
@@ -21,14 +22,22 @@ namespace EasySave_CLI.Model
         static System.Timers.Timer timer;
         private string _sourceDirectory;
         private string _targetDirectory;
-        public BackupJob(string name, string sourceDirectory, string targetDirectory)
+        public string Type { get; set; }
+        private int? _delay;
+        public BackupJob(string name, string sourceDirectory, string targetDirectory, string type, int? delay = 0)
         {
             _name = name;
             _sourceDirectory = sourceDirectory;
             _targetDirectory = targetDirectory;
+            Type = type;
+            _delay = delay;
         }
 
-        
+        public override string ToString()
+        {
+            return this._name;
+        }
+
         public void SetTime(int interval)
         {
             timer = new System.Timers.Timer(interval);
@@ -40,14 +49,13 @@ namespace EasySave_CLI.Model
             //APPEL DE METHODE DO DIFFERENTIAL
         }
 
-        public async void DoDifferiencialBackup(int delayIntHour)
+        public async Task DoDifferiencialBackup()
         {
             await Task.Run(() =>
             {
-                doBackup(SourceDirectory, TargetDirectory);
             });
         }
-        public async void DoBackup()
+        public async Task DoBackup()
         {
             await Task.Run(() =>
             {
@@ -67,7 +75,6 @@ namespace EasySave_CLI.Model
                         }
                         else if (File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
                             CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
-                            Console.WriteLine("pfeffsv");
                     }
                 }
             });
@@ -113,6 +120,16 @@ namespace EasySave_CLI.Model
             DirectoryInfo source = new DirectoryInfo(SourceDirectory);
             DirectoryInfo target = new DirectoryInfo(TargetDirectory);
 
+            long totalSize = 0;
+            foreach (FileInfo file in source.GetFiles(Name))
+            {
+                totalSize += file.Length;
+            }
+            FileInfo[] directoryFiles = source.GetFiles();
+            RealTimeLog realtimeLog = LogManager.GetNewRealTimeLog(totalSize, directoryFiles.Length);
+
+
+
             if (target.Exists == false)
             {
                 target.Create();
@@ -121,11 +138,13 @@ namespace EasySave_CLI.Model
             foreach (FileInfo file in source.GetFiles(Name))
             {
                 var stopwatch = Stopwatch.StartNew();
-                file.CopyTo(Path.Combine(target.FullName, file.Name),true);
+                string fileSourcePath = Path.Combine(file.Directory.ToString(), file.Name);
+                string fileTargetPath = Path.Combine(target.FullName, file.Name);
+                file.CopyTo(fileTargetPath,true);
                 Name = file.Name;
                 DateTime Date = DateTime.Now;
                 stopwatch.Stop();
-                
+                realtimeLog.UpdateLog(new TransferFile(file.Name, fileSourcePath, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds));
                 Console.WriteLine("- " + Name + " : " + Date.ToString() + " - " + +stopwatch.Elapsed.Seconds + " seconds");
             }
 

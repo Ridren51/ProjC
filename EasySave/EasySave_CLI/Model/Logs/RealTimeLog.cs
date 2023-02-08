@@ -6,15 +6,15 @@ namespace EasySave_CLI.Model.Logs
     {
         public override Type LogType => typeof(RealTimeLog);
         private string _state;
-        private int _totalFilesSize;
+        private long _totalFilesSize;
         private int _totalFiles;
         private int _filesLeft;
         public string State { get { return _state; } set { _state = value; } }
         public int TotalFiles { get { return _totalFiles; } set { _totalFiles = value; } }
-        public int TotalFilesSize { get { return _totalFilesSize; } set { _totalFilesSize = value; } }
+        public long TotalFilesSize { get { return _totalFilesSize; } set { _totalFilesSize = value; } }
         public int FilesLeft { get { return _filesLeft; } set { _filesLeft = value; } }
 
-        public RealTimeLog(int totalFilesSize, int totalFiles)
+        public RealTimeLog(long totalFilesSize, int totalFiles)
         {
             _state = "INACTIVE";
             _totalFilesSize = totalFilesSize;
@@ -39,10 +39,6 @@ namespace EasySave_CLI.Model.Logs
             FilesLeft--;
         }
 
-        public void updateLog()
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

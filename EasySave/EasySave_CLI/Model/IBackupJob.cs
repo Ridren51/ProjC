@@ -8,7 +8,7 @@ namespace EasySave_CLI.Model
 {
     internal interface IBackupJob
     {
-      public void DoBackup();
-      public void DoDifferiencialBackup(int delayInHour);
+      public Task DoBackup();
+      public Task DoDifferiencialBackup();
     }
 }

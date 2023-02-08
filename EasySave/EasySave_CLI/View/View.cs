@@ -27,6 +27,8 @@ namespace EasySave_CLI.View
                 string? option = Console.ReadLine();
                 if (int.TryParse(option, out int value))
                     ParseInput(value);
+                else
+                    ShowHelp();
             }
                 
         }
@@ -35,9 +37,9 @@ namespace EasySave_CLI.View
             switch (option)
             {
                 case 1:
-                    Console.WriteLine("1"); break;
+                    RunBackups(); break;
                 case 2:
-                    Console.WriteLine("2"); break;
+                    RunSpecificBackup(); break;
                 case 3:
                     AddBackupJob(); break;
                 case 4:
@@ -85,12 +87,26 @@ namespace EasySave_CLI.View
                 Console.WriteLine(_consoleLanguage.GetString("QueueFull"));
                 return;
              }
+            int delay = 0;
+            Console.WriteLine(_consoleLanguage.GetString("BackupType"));
+            string type = Console.ReadLine();
+            if (type.Equals("1"))
+            {
+                Console.WriteLine(_consoleLanguage.GetString("BackupDelay"));
+                delay = int.Parse(Console.ReadLine());
+            }
             Console.WriteLine(_consoleLanguage.GetString("EnterName"));
             string name = Console.ReadLine();
-            if (_adapter.IsNameValid(name))
-                _adapter.AddBackupJob(name);
+            Console.WriteLine(_consoleLanguage.GetString("SourceDirectory"));
+            string sourceDirectory = Console.ReadLine();
+            Console.WriteLine(_consoleLanguage.GetString("TargetDirectory"));
+            string targetDirectory = Console.ReadLine();
+
+
+            if (_adapter.IsNameValid(name) && _adapter.IsDirectoryValid(sourceDirectory) && _adapter.IsDirectoryValid(targetDirectory))
+                _adapter.AddBackupJob(name, sourceDirectory, targetDirectory, type, delay);
             else
-                Console.WriteLine(_consoleLanguage.GetString("InvalidName"));
+                Console.WriteLine(_consoleLanguage.GetString("InvalidBackupArgument"));
         }
 
         private void DeleteBackupJob()
@@ -108,6 +124,19 @@ namespace EasySave_CLI.View
             for (int i = 0; i < _adapter.BackupJobs.Count; i++) {
                 Console.WriteLine(i + 1 + "- " + _adapter.GetBackupJob(i).ToString());
              }
+        }
+
+        private void RunBackups()
+        {
+            _adapter.RunAllBackups();
+            Console.WriteLine(_consoleLanguage.GetString("EnterIndex"));
+        }
+        private void RunSpecificBackup()
+        {
+            ShowBackupQueue();
+            Console.WriteLine(_consoleLanguage.GetString("SpecificBackup"));
+            _adapter.RunSpecificBackup(int.Parse(Console.ReadLine()) - 1);
+            Console.WriteLine(_consoleLanguage.GetString("EnterIndex"));
         }
     }
 }
