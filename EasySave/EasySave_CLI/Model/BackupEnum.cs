@@ -10,7 +10,7 @@ namespace EasySave_CLI.Model
     {
         [System.ComponentModel.Description("diff")]
         Differential = 1,
-        [System.ComponentModel.Description("stand")]
-        Standard = 2,
+        [System.ComponentModel.Description("full")]
+        Full = 2,
     }
 }
