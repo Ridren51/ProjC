@@ -2,10 +2,12 @@
 using EasySave_CLI.View;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace EasySave_CLI.ViewModel
 {
@@ -24,9 +26,9 @@ namespace EasySave_CLI.ViewModel
 
         }
 
-        public void AddBackupJob(string name, string sourceDirectory, string targetDirectory, string type, int delay)
+        public void AddBackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
-            BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type, delay));
+            BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type));
         }
 
         public Boolean IsBackupQueueFull()
@@ -57,10 +59,7 @@ namespace EasySave_CLI.ViewModel
 
         public async void RunSpecificBackup(int index)
         {
-            if (BackupJobs[index].Type == "diff")
-                await BackupJobs[index].DoDifferiencialBackup();
-            else
-                await BackupJobs[index].DoBackup();
+            await BackupJobs[index].DoBackup();
             BackupJobs.RemoveAt(index);
         }
         public async void RunAllBackups()
@@ -68,10 +67,7 @@ namespace EasySave_CLI.ViewModel
             List<BackupJob> backupJobsCopy = BackupJobs.ToList();
             foreach(BackupJob backup in backupJobsCopy)
             {
-                if (backup.Type == "diff")
-                    await backup.DoDifferiencialBackup();
-                else
-                    await backup.DoBackup();
+                await backup.DoBackup();
                 BackupJobs.Remove(backup);
             }
         }
@@ -134,15 +130,31 @@ namespace EasySave_CLI.ViewModel
         {
             return "English";
         }
-        public string GetEnumValueByIndex(string index) {
-            switch (int.Parse(index))
-            {
-                case 1: return "diff";
-                case 2: return "stand";
-                default:
-                    return "stand";
-            }
+        static string GetEnumDescription(Enum value)
+        {
+            var fieldInfo = value.GetType().GetField(value.ToString());
+            var attributes = (System.ComponentModel.DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false);
+            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
         }
+
+        public static string GetEnumValues()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (int value in Enum.GetValues(typeof(BackupEnum)))
+            {
+                var name = Enum.GetName(typeof(BackupEnum), value);
+                var descriptionAttribute = (System.ComponentModel.DescriptionAttribute)Attribute.GetCustomAttribute(typeof(BackupEnum).GetField(name), typeof(System.ComponentModel.DescriptionAttribute));
+                sb.Append(value + ": " + name + Environment.NewLine);
+            }
+
+            return sb.ToString();
+        }
+        public static BackupEnum GetBackupTypeByIndex(int index)
+        {
+            return (BackupEnum)Enum.ToObject(typeof(BackupEnum), index);
+        }
+
 
     }
 }
