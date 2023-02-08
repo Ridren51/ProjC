@@ -72,11 +72,6 @@ namespace EasySave_CLI.ViewModel
             }
         }
 
-        public async void RunDifferencialBackup(int delay)
-        {
-
-        }
-
         private void GenerateEnglishLanguage()
         {
             var english = new Dictionary<string, string>
