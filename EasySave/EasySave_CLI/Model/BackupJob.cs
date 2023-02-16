@@ -35,6 +35,16 @@ namespace EasySave_CLI.Model
         {
             return this._name;
         }
+
+        public BackupInfoStruct GetBackupInfos()
+        {
+            BackupInfoStruct backupInfo;
+            backupInfo.BackupName = _name;
+            backupInfo.SourceDir = _sourceDirectory;
+            backupInfo.targetDir = _targetDirectory;
+            backupInfo.BackupType = Enum.GetName(Type);
+            return backupInfo;
+        }
         public async Task DoBackup()
         {
             await Task.Run(() =>
