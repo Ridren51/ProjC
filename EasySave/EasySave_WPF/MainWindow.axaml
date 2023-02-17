@@ -1,9 +1,75 @@
-<Window xmlns="https://github.com/avaloniaui"
+﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:iconPacks="clr-namespace:Avalonia.Controls.IconPacks;assembly=Avalonia.Controls.IconPacks"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="EasySave_WPF.MainWindow"
-        Title="EasySave_WPF">
-    Welcome to Avalonia!
+        Title="EasySave_WPF"
+        Width="600"
+		Height="500">
+	<Window.Styles>
+		<FluentTheme Mode="Light" />
+	</Window.Styles>
+	<Window.MinWidth>600</Window.MinWidth>
+	<Window.MinHeight>400</Window.MinHeight>
+	<Window.Background>#2c2f33</Window.Background>
+<Grid RowDefinitions="Auto,Auto">
+	<Grid Grid.Row="0" VerticalAlignment="Top" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+		<Grid Grid.Row="0"  ShowGridLines="False" Background="#23272a">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Button Grid.Row="0" Grid.Column="0" Content="" Height="30" Width="150" Margin="10" Background="White">
+				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Logo.png" Height="30" />
+			</Button>
+			<Button Grid.Row="0" Grid.Column="2" Content=""	Width="30" Height="30" Margin="10">
+				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Play.png" Width="30" Height="30" />
+			</Button>
+			<Button Grid.Row="0" Grid.Column="3" Content=""	Width="30" Height="30" Margin="10">
+				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Stop.png" Width="30" Height="30" />
+			</Button>
+			<Button Grid.Row="0" Grid.Column="4" Content=""	Width="30" Height="30" Margin="10">
+				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Pause.png" Width="30" Height="30" />
+			</Button>
+			<Button Grid.Row="0" Grid.Column="6" Content=""	Width="30" Height="30" Margin="10" HorizontalAlignment="Right">
+				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Historic.png" Width="30" Height="30" />
+			</Button>
+			<Button Grid.Row="0" Grid.Column="7" Content=""	Width="30" Height="30" Margin="10" HorizontalAlignment="Right">
+				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Gear.png" Width="30" Height="30" />
+			</Button>
+		</Grid>
+	</Grid>
+	<Grid Grid.Row="1">
+		<Border  CornerRadius="10" BorderBrush="White">
+			<TabControl TabStripPlacement="Left" Margin="10" CornerRadius="10">
+				<TabItem  Background="#99aab5" Header="▶️ Backups" CornerRadius="10">
+					<Grid Background="#99aab5">
+						
+					</Grid>
+				</TabItem>
+				<TabItem Background="#99aab5" Header="📋 Backups" CornerRadius="10">
+					<Grid Background="#99aab5">
+					
+					</Grid>
+				</TabItem>
+				<TabItem Background="#99aab5" Header="↩️ Queue" CornerRadius="10">
+					<Grid Background="#99aab5">
+					
+					</Grid>
+				</TabItem>
+			</TabControl>
+		</Border>
+	</Grid>
+</Grid>
 </Window>
