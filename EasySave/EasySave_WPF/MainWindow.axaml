@@ -47,6 +47,14 @@
 			</Button>
 			<Button Grid.Row="0" Grid.Column="7" Content=""	Width="30" Height="30" Margin="10" HorizontalAlignment="Right">
 				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Gear.png" Width="30" Height="30" />
+				<Button.Flyout>
+					<Flyout Placement="Bottom">
+						<ComboBox SelectedIndex="0">
+							<ComboBoxItem>EN</ComboBoxItem>
+							<ComboBoxItem>FR</ComboBoxItem>
+						</ComboBox>
+					</Flyout>
+				</Button.Flyout>
 			</Button>
 		</Grid>
 	</Grid>
@@ -59,8 +67,22 @@
 					</Grid>
 				</TabItem>
 				<TabItem Background="#99aab5" Header="📋 Backups" CornerRadius="10">
-					<Grid Background="#99aab5">
-					
+					<Grid Background="#99aab5" VerticalAlignment="Top" HorizontalAlignment="Left">
+						<Menu DockPanel.Dock="Top">
+							<MenuItem Header="New">
+								<MenuItem Header="Full">
+									<TextBlock>Name :</TextBlock>
+									<TextBox Name="BackupName"></TextBox>
+								</MenuItem>
+								<Separator/>
+								<MenuItem Header="Diferential"/>
+							</MenuItem>
+							<MenuItem Header="Edit">
+								<MenuItem Header=""/>
+								<Separator/>
+								<MenuItem Header=""/>
+							</MenuItem>
+						</Menu>	
 					</Grid>
 				</TabItem>
 				<TabItem Background="#99aab5" Header="↩️ Queue" CornerRadius="10">
