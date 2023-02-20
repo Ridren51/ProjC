@@ -13,10 +13,27 @@ namespace EasySave_CLI.View
     {
         private Adapter _adapter;
         private ConsoleLanguage _consoleLanguage;
-        public View()
+        private static Mutex mutex;
+        private static View instance;
+        private View()
         {
             _adapter = new Adapter();
             _consoleLanguage = _adapter.ConsoleLanguage;
+        }
+        public static View Instance
+        {
+            get
+            {
+                    if (instance == null)
+                    {
+                        mutex = new Mutex(true, "CLIMutex", out bool createdNew);
+                        if (!createdNew)
+                            throw new ApplicationException("Another instance is already running.");
+                        // Create the instance
+                        instance = new View();
+                    }
+                    return instance;
+            }
         }
 
         public void Start()
