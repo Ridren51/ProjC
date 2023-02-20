@@ -9,7 +9,6 @@ namespace EasySave_CLI.Model.Logs
 {
     internal class DailyLog : Log
     {
-        public override Type LogType => typeof(DailyLog);
         public DailyLog()
         {
             _logPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
@@ -22,8 +21,7 @@ namespace EasySave_CLI.Model.Logs
                 CreateLogFile();
             using (StreamWriter sw = new StreamWriter(_logPath, true))
             {
-                sw.WriteLine(getLogJSON(file));
-                sw.Close();
+                sw.WriteLine(getLog(file, LogManager.logFormat));
             }
         }
 
