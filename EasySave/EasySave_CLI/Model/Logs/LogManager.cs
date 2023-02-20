@@ -8,6 +8,7 @@ namespace EasySave_CLI.Model.Logs
 {
     public static class LogManager
     {
+        public static LogFormat logFormat = LogFormat.JSON;
         private static DailyLog dailyLog = new DailyLog();
 
         public static RealTimeLog GetNewRealTimeLog(long totalFilesSize, int totalFiles)
