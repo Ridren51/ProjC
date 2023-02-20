@@ -7,6 +7,6 @@ using System.Xml.Schema;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-new View().Start();
+View.Instance.Start();
 
 
