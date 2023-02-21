@@ -11,13 +11,13 @@ namespace EasySave_CLI.View
 {
     public class View
     {
-        private CLIAdapter _adapter;
+        private WPFAdapter _adapter;
         private ConsoleLanguage _consoleLanguage;
         private static Mutex mutex;
         private static View instance;
         private View()
         {
-            _adapter = new CLIAdapter();
+            _adapter = new WPFAdapter();
             _consoleLanguage = _adapter.ConsoleLanguage;
         }
         public static View Instance
@@ -70,6 +70,13 @@ namespace EasySave_CLI.View
                     SetLanguage(); break;
                 case 8:
                     System.Environment.Exit(0); break;
+                case 9:
+                    _adapter.PauseBackup(0);
+                    break;
+                case 10:
+                    _adapter.ResumeBackup(0);
+                    break;
+
                 default:
                     Console.Clear(); ShowHelp(); break;
             }
