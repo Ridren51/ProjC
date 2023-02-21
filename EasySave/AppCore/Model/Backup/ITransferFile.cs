@@ -13,6 +13,7 @@ namespace AppCore.Model.Backup
         public string TargetPath { get; set; }
         public long Size { get; set; }
         public double? TransferTime { get; set; }
+        public int? CryptingTime { get; set; }
 
     }
 }

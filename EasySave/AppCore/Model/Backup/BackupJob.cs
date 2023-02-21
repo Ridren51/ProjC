@@ -13,21 +13,40 @@ using System.Threading;
 using EasySave_CLI.Model.Logs;
 using EasySave_CLI.Model;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using AppCore.Model.Utilities;
 
 namespace AppCore.Model.Backup
 {
     public class BackupJob : IBackupJob
     {
-        private string _name;
-        private string _sourceDirectory;
-        private string _targetDirectory;
+        private readonly string _name;
+        private readonly string _sourceDirectory;
+        private readonly string _targetDirectory;
+        private readonly List<string> _extensionToCrypt;
+        private static Semaphore _heavyFile = new Semaphore(1,1);
+        private double _heavyFileSize = Config.HeavyFileSize;
+        private Thread _backupThread { get; set; }
+        private ManualResetEvent _pauseEvent = new ManualResetEvent(true);
+
         public BackupEnum Type { get; set; }
+        public BackupJob(string name, string sourceDirectory, string targetDirectory,
+            BackupEnum type, ref List<string> extensionToCrypt, ref double heavyFileSize)
+        {
+            _name = name;
+            _sourceDirectory = sourceDirectory;
+            _targetDirectory = targetDirectory;
+            Type = type;
+            _extensionToCrypt = extensionToCrypt;
+            _heavyFileSize=heavyFileSize;
+        }
         public BackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
             _name = name;
             _sourceDirectory = sourceDirectory;
             _targetDirectory = targetDirectory;
             Type = type;
+            _extensionToCrypt = new List<string>();
         }
 
         public override string ToString()
@@ -39,7 +58,7 @@ namespace AppCore.Model.Backup
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
-                IgnoreNullValues = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             return JsonSerializer.Serialize(new
@@ -50,7 +69,24 @@ namespace AppCore.Model.Backup
                 type = this.Type.ToString(),
             }, options);
         }
-        public async Task DoBackup()
+        public void StartBackup()
+        {
+            if(_backupThread == null || _backupThread.ThreadState == System.Threading.ThreadState.Stopped)
+            {
+                _backupThread = new Thread(DoBackup);
+                _backupThread.Start();
+            }
+        }
+        public void PauseBackup()
+        {
+            _pauseEvent.Reset();
+        }
+
+        public void ResumeBackup()
+        {
+            _pauseEvent.Set();
+        }
+        public async Task AsyncDoBackup()
         {
             await Task.Run(() =>
             {
@@ -74,7 +110,50 @@ namespace AppCore.Model.Backup
             });
         }
 
+        public void DoBackup()
+        {
+            DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(_sourceDirectory);
+            DirectoryInfo targetDirectoryInfo = new DirectoryInfo(_targetDirectory);
+            bool isComplete = Type == BackupEnum.Full;
+            foreach (FileInfo file in sourceDirectoryInfo.GetFiles())
+            {
+                bool isFileHeavy = file.Length >= _heavyFileSize;
+                if (isFileHeavy)
+                    _heavyFile.WaitOne();
+                try
+                {
+                    _pauseEvent.WaitOne();
+                    bool shouldCryptFile = _extensionToCrypt.Contains(file.Extension);
+                    if (isComplete && File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                        CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
+                    else
+                    {
+                        if (File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                            CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
+                        else if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
+                            CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
+                    }
+                }finally
+                {
+                    if (isFileHeavy)
+                        _heavyFile.Release();
+                }
+            }
+               
+    }
 
+        private int CryptFile(string inputPath, string outputPath)
+        {
+            string cryptoSoftPath = PathHandler.getRelativePath("Cryptosoft/CryptoSoft.exe");
+            string arguments = $"{inputPath} {outputPath}";
+            Console.WriteLine(arguments);
+            Process process = Process.Start(cryptoSoftPath, arguments);
+            process.WaitForExit(); // Wait for the process to finish running
+
+            int exitCode = process.ExitCode; // Retrieve the exit code
+
+            return exitCode;
+        }
 
         private string GetFileSourcePath(DirectoryInfo sourceDirectoryInfo, DirectoryInfo targetDirectoryInfo, FileInfo file)
         {
@@ -109,7 +188,7 @@ namespace AppCore.Model.Backup
             return true;
         }
 
-        private void CopyDirectory(string SourceDirectory, string TargetDirectory, string Name)
+        private void CopyDirectory(string SourceDirectory, string TargetDirectory, string Name, bool crypt = false)
         {
             DirectoryInfo source = new DirectoryInfo(SourceDirectory);
             DirectoryInfo target = new DirectoryInfo(TargetDirectory);
@@ -128,17 +207,19 @@ namespace AppCore.Model.Backup
             {
                 target.Create();
             }
-
             foreach (FileInfo file in source.GetFiles(Name))
             {
+                int cryptingTime = -1;
                 var stopwatch = Stopwatch.StartNew();
-                string fileSourcePath = Path.Combine(file.Directory.ToString(), file.Name);
                 string fileTargetPath = Path.Combine(target.FullName, file.Name);
-                file.CopyTo(fileTargetPath, true);
                 Name = file.Name;
                 DateTime Date = DateTime.Now;
+                if (crypt)
+                    cryptingTime = CryptFile(file.FullName, fileTargetPath);
+                else
+                    file.CopyTo(fileTargetPath, true);
                 stopwatch.Stop();
-                realtimeLog.UpdateLog(new TransferFile(_name, fileSourcePath, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds));
+                LogManager.UpdateRealTimeLog(realtimeLog, new TransferFile(_name, file.FullName, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds, crypt ? cryptingTime : null));
                 Console.WriteLine("- " + Name + " : " + Date.ToString() + " - " + +stopwatch.Elapsed.Seconds + " seconds");
             }
 
