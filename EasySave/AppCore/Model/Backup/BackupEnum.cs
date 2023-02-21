@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave_CLI.Model
+namespace AppCore.Model.Backup
 {
-    internal enum BackupEnum
+    public enum BackupEnum
     {
         [System.ComponentModel.Description("diff")]
         Differential = 1,

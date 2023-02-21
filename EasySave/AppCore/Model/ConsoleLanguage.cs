@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySave_CLI.View
 {
-    internal class ConsoleLanguage
+    public class ConsoleLanguage
     {
         private Dictionary<string, Dictionary<string, string>> _languages;
         private string _currentLanguage;

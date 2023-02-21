@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave_CLI.Model
+namespace AppCore.Model.Backup
 {
     public interface ITransferFile
     {

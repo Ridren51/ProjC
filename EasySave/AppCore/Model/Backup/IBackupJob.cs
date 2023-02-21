@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave_CLI.Model
+namespace AppCore.Model.Backup
 {
     internal interface IBackupJob
     {
-      public Task DoBackup();
+        public Task DoBackup();
     }
 }

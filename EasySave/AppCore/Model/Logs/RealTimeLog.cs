@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using AppCore.Model.Backup;
 
 namespace EasySave_CLI.Model.Logs
 {
@@ -19,18 +20,18 @@ namespace EasySave_CLI.Model.Logs
             _totalFiles = totalFiles;
             _filesLeft = totalFiles;
             _logPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                "\\state.json";
+                "\\state";
         }
         public override void UpdateLog(ITransferFile file)
         {
-            
-            if (!File.Exists(_logPath))
+            string pathToLog = _logPath + LogManager.logFormat.ToString().ToLower();
+            if (!File.Exists(pathToLog))
                 CreateLogFile();
             if (_filesLeft > 1)
                 State = "ACTIVE";
             else
                 State = "END";
-            using (StreamWriter sw = new StreamWriter(_logPath, true))
+            using (StreamWriter sw = new StreamWriter(pathToLog, true))
             {
                 sw.WriteLine(getLog(file, LogManager.logFormat));
             }

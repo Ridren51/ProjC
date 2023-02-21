@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave_CLI.Model
+namespace AppCore.Model.Backup
 {
     public class TransferFile : ITransferFile
     {
@@ -15,10 +15,10 @@ namespace EasySave_CLI.Model
         public double? TransferTime { get; set; }
         public TransferFile(string name, string sourcePath, string targetPath, long size, double? TransferTime)
         {
-            this.BackupName=name;
-            this.SourcePath=sourcePath;
-            this.TargetPath=targetPath;
-            this.Size=size;
+            BackupName = name;
+            SourcePath = sourcePath;
+            TargetPath = targetPath;
+            Size = size;
             this.TransferTime = TransferTime;
         }
 

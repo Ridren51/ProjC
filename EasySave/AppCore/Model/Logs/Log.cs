@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using AppCore.Model.Backup;
 
 namespace EasySave_CLI.Model.Logs
 {

@@ -9,17 +9,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Xml.Linq;
-using EasySave_CLI.Model;
-using System.Timers;
 using System.Threading;
 using EasySave_CLI.Model.Logs;
+using EasySave_CLI.Model;
+using System.Text.Json;
 
-namespace EasySave_CLI.Model
+namespace AppCore.Model.Backup
 {
-    internal class BackupJob : IBackupJob
+    public class BackupJob : IBackupJob
     {
         private string _name;
-        static System.Timers.Timer timer;
         private string _sourceDirectory;
         private string _targetDirectory;
         public BackupEnum Type { get; set; }
@@ -33,7 +32,23 @@ namespace EasySave_CLI.Model
 
         public override string ToString()
         {
-            return this._name;
+            return _name;
+        }
+        public string ToJSON()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                IgnoreNullValues = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            return JsonSerializer.Serialize(new
+            {
+                this._name,
+                this._sourceDirectory,
+                this._targetDirectory,
+                type = this.Type.ToString(),
+            }, options);
         }
         public async Task DoBackup()
         {
@@ -42,7 +57,7 @@ namespace EasySave_CLI.Model
                 {
                     DirectoryInfo sourceDirectoryInfo = new DirectoryInfo(_sourceDirectory);
                     DirectoryInfo targetDirectoryInfo = new DirectoryInfo(_targetDirectory);
-                    Boolean isComplete = this.Type == BackupEnum.Full;
+                    bool isComplete = Type == BackupEnum.Full;
                     foreach (FileInfo file in sourceDirectoryInfo.GetFiles())
                     {
                         if (isComplete && File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
@@ -119,11 +134,11 @@ namespace EasySave_CLI.Model
                 var stopwatch = Stopwatch.StartNew();
                 string fileSourcePath = Path.Combine(file.Directory.ToString(), file.Name);
                 string fileTargetPath = Path.Combine(target.FullName, file.Name);
-                file.CopyTo(fileTargetPath,true);
+                file.CopyTo(fileTargetPath, true);
                 Name = file.Name;
                 DateTime Date = DateTime.Now;
                 stopwatch.Stop();
-                realtimeLog.UpdateLog(new TransferFile(this._name, fileSourcePath, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds));
+                realtimeLog.UpdateLog(new TransferFile(_name, fileSourcePath, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds));
                 Console.WriteLine("- " + Name + " : " + Date.ToString() + " - " + +stopwatch.Elapsed.Seconds + " seconds");
             }
 
