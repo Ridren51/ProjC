@@ -12,41 +12,65 @@ using System.Xml.Linq;
 
 namespace EasySave_CLI.ViewModel
 {
-    public class CLIAdapter
+    public class WPFAdapter
     {
         public List<BackupJob> BackupJobs { get; set; }
         public ConsoleLanguage ConsoleLanguage { get; set; }
-        public CLIAdapter() {
-
+        public WPFAdapter()
+        {
             BackupJobs = new List<BackupJob>();
             BackupJobs.Capacity = 5;
             ConsoleLanguage = new ConsoleLanguage();
             GenerateEnglishLanguage();
             GenerateFrenchLanguage();
             ConsoleLanguage.SetLanguage("English");
+            Config.AddCryptingExtension(".txt");
 
         }
 
-        public void AddBackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
+        public async void AddBackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
-            BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type));
+            await Task.Run(() =>
+            {
+                BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type, ref Config.CryptingExtension, ref Config.HeavyFileSize));
+            });
+        }
+        public async void PauseBackup(int index)
+        {
+            await Task.Run(() =>
+            {
+                BackupJobs[index].PauseBackup();
+            });
         }
 
+        public async void ResumeBackup(int index)
+        {
+            await Task.Run(() =>
+            {
+                BackupJobs[index].ResumeBackup();
+            });
+        }
         public Boolean IsBackupQueueFull()
         {
             return BackupJobs.Count == 5;
         }
 
-        public void RemoveBackupJob(int index)
+        public async void RemoveBackupJob(int index)
         {
-            try
+            await Task.Run(() =>
             {
-                BackupJobs.RemoveAt(index);
-            } catch(ArgumentOutOfRangeException){
-                return;
-            }
+                try
+                {
+                    BackupJobs.RemoveAt(index);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return;
+                }
+            });
         }
-        public BackupJob GetBackupJob(int index) { 
+        public BackupJob GetBackupJob(int index)
+        {
             return BackupJobs[index];
         }
         public Boolean IsNameValid(string? name)
@@ -60,19 +84,23 @@ namespace EasySave_CLI.ViewModel
 
         public async void RunSpecificBackup(int index)
         {
-            await BackupJobs[index].AsyncDoBackup();
-            History.WriteHistory(BackupJobs[index]);
-            BackupJobs.RemoveAt(index);
+            await Task.Run(() =>
+            {
+                BackupJobs[index].StartBackup();
+                History.WriteHistory(BackupJobs[index]);
+            });
         }
         public async void RunAllBackups()
         {
-            List<BackupJob> backupJobsCopy = BackupJobs.ToList();
-            foreach(BackupJob backup in backupJobsCopy)
+            await Task.Run(() =>
             {
-                await backup.AsyncDoBackup();
-                History.WriteHistory(backup);
-                BackupJobs.Remove(backup);
-            }
+                List<BackupJob> backupJobsCopy = BackupJobs.ToList();
+                foreach (BackupJob backup in backupJobsCopy)
+                {
+                    backup.StartBackup();
+                    History.WriteHistory(backup);
+                }
+            });
         }
 
         private void GenerateEnglishLanguage()
@@ -119,7 +147,7 @@ namespace EasySave_CLI.ViewModel
         {
             ConsoleLanguage.SetLanguage(language);
         }
-        
+
         public string GetFrenchLanguage()
         {
             return "Francais";
