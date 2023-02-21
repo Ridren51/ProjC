@@ -18,6 +18,7 @@ namespace EasySave_CLI.Model.Logs
         public int? TotalFilesToCopy { get; set; }
         public long? TotalFilesSize { get; set; }
         public int? NbFilesLeftToDo { get; set; }
+        public int? CryptingTime { get; set; }
         public int? Progression { get; set; }
         private string _dateFormat = "dd/MM/yyyy HH:mm:ss";
         public string Time { get; set; }
@@ -31,7 +32,9 @@ namespace EasySave_CLI.Model.Logs
             State = log.State;
             TotalFilesToCopy = log.TotalFiles;
             NbFilesLeftToDo = log.FilesLeft;
+            CryptingTime = file.CryptingTime;
             Progression = 100 - (NbFilesLeftToDo - 1) * 100 / TotalFilesToCopy;
+
             Time = DateTime.Now.ToString(_dateFormat);
         }
         public JsonLog(ITransferFile file, DailyLog log)
