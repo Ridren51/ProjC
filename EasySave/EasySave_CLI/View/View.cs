@@ -11,13 +11,13 @@ namespace EasySave_CLI.View
 {
     public class View
     {
-        private Adapter _adapter;
+        private CLIAdapter _adapter;
         private ConsoleLanguage _consoleLanguage;
         private static Mutex mutex;
         private static View instance;
         private View()
         {
-            _adapter = new Adapter();
+            _adapter = new CLIAdapter();
             _consoleLanguage = _adapter.ConsoleLanguage;
         }
         public static View Instance
@@ -106,7 +106,7 @@ namespace EasySave_CLI.View
                 Console.WriteLine(_consoleLanguage.GetString("QueueFull"));
                 return;
             }
-            Console.WriteLine(Adapter.GetEnumValues());
+            Console.WriteLine(CLIAdapter.GetEnumValues());
             int type = int.Parse(Console.ReadLine());
             Console.WriteLine(_consoleLanguage.GetString("EnterName"));
             string name = Console.ReadLine();
@@ -117,7 +117,7 @@ namespace EasySave_CLI.View
 
 
             if (_adapter.IsNameValid(name) && _adapter.IsDirectoryValid(sourceDirectory) && _adapter.IsDirectoryValid(targetDirectory))
-                _adapter.AddBackupJob(name, sourceDirectory, targetDirectory,Adapter.GetBackupTypeByIndex(type));
+                _adapter.AddBackupJob(name, sourceDirectory, targetDirectory,CLIAdapter.GetBackupTypeByIndex(type));
             else
                 Console.WriteLine(_consoleLanguage.GetString("InvalidBackupArgument"));
         }

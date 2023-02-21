@@ -1,4 +1,5 @@
-﻿using EasySave_CLI.Model;
+﻿using AppCore.Model.Backup;
+using AppCore.Model.Utilities;
 using EasySave_CLI.View;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,11 @@ using System.Xml.Linq;
 
 namespace EasySave_CLI.ViewModel
 {
-    internal class Adapter
+    public class CLIAdapter
     {
         public List<BackupJob> BackupJobs { get; set; }
         public ConsoleLanguage ConsoleLanguage { get; set; }
-        public Adapter() {
+        public CLIAdapter() {
 
             BackupJobs = new List<BackupJob>();
             BackupJobs.Capacity = 5;
@@ -60,6 +61,7 @@ namespace EasySave_CLI.ViewModel
         public async void RunSpecificBackup(int index)
         {
             await BackupJobs[index].DoBackup();
+            History.WriteHistory(BackupJobs[index]);
             BackupJobs.RemoveAt(index);
         }
         public async void RunAllBackups()
@@ -68,6 +70,7 @@ namespace EasySave_CLI.ViewModel
             foreach(BackupJob backup in backupJobsCopy)
             {
                 await backup.DoBackup();
+                History.WriteHistory(backup);
                 BackupJobs.Remove(backup);
             }
         }
