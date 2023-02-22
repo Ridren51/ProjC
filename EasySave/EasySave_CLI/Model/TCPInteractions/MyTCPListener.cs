@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 
 namespace EasySave_CLI.Model.TCPInteractions
 {
@@ -20,7 +22,6 @@ namespace EasySave_CLI.Model.TCPInteractions
             requestHandler = new RequestHandler();
             try
             {
-
                 // Set the TcpListener on port 23805.
                 Int32 port = 23805;
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");
@@ -33,7 +34,7 @@ namespace EasySave_CLI.Model.TCPInteractions
 
                 // Buffer for reading data
                 Byte[] bytes = new Byte[256];
-                string data = "";
+                //string data = "";
 
                 // Enter the listening loop.
                 while (true)
@@ -52,18 +53,25 @@ namespace EasySave_CLI.Model.TCPInteractions
                     try
                     {
                         int i;
-
                         // Loop to receive all the data sent by the client.
                         while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                         {
-                            // Translate data bytes to a ASCII string.
-                            data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                            Console.WriteLine("Received: {0}", data);
+                            // Translate data bytes to a Unicode string.
+                            var message = Encoding.Unicode.GetString(bytes, 0, i);
+                            try
+                            {
+                                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<object>(message);
 
-                            // Process the data sent by the client.
-                            data = data.ToUpper();
-
-                            ProcessRequest(data.Split(':'), stream);
+                                if (data is string)
+                                {
+                                    Console.WriteLine("Received on server: {0}", (string)data);
+                                    ProcessRequest(((string)data).Split(':'), stream);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Exception deserializing message on server : {0}", e);
+                            }
                         }
                     }
                     catch (System.IO.IOException e)
@@ -91,30 +99,28 @@ namespace EasySave_CLI.Model.TCPInteractions
             {
                 case "RunBackups":
                 {
+                    requestHandler.RunAllBackups();
+                    SendResponse("All backups are running", stream);
                     break;
                 }
                 case "RunSpecificBackup":
                 {
+                    requestHandler.RunSpecificBackup(Int32.Parse(request[1]));
                     break;
                 }
                 case "AddBackupJob":
                 {
+                    requestHandler.AddBackupJob(request[1], request[2], request[3], request[4]);
                     break;
                 }
                 case "DeleteBackupJob":
                 {
-                    break;
-                }
-                case "SetLanguage":
-                {
-                    break;
-                }
-                case "GetLanguage":
-                {
+                    requestHandler.RemoveBackupJob(Int32.Parse(request[1]));
                     break;
                 }
                 case "GetAllBackups":
                 {
+                    SendResponse(requestHandler.GetAllBackups(), stream);
                     break;
                 }
                 case "RestoreBackup":
@@ -140,17 +146,12 @@ namespace EasySave_CLI.Model.TCPInteractions
             }
         }
 
-        private void SendResponseLineByLine(string[] message, NetworkStream stream)
+        private static void SendResponse(object response, NetworkStream stream)
         {
-            foreach (string line in message)
-            {
-                SendResponse(line, stream);
-            }
-        }
-        private void SendResponse(string message, NetworkStream stream)
-        {
-            byte[] lineSent = System.Text.Encoding.ASCII.GetBytes(message);
-            stream.Write(lineSent, 0, lineSent.Length);
+            // Envoyer la réponse au client
+            var message = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            var buffer = Encoding.Unicode.GetBytes(message);
+            stream.Write(buffer, 0, buffer.Length);
         }
     }
 }

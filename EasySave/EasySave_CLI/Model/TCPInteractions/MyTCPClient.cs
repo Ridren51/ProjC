@@ -1,7 +1,10 @@
-﻿using System;
+﻿using EasySave_CLI.Model;
+using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 
 class MyTCPClient
 {
@@ -27,7 +30,7 @@ class MyTCPClient
     {
         try
         {
-            if(Client != null && Client.Connected)
+            if (Client != null && Client.Connected)
             {
                 if (request == null) { request = string.Empty; }
 
@@ -42,16 +45,14 @@ class MyTCPClient
                 // Obtenir un flux de données pour envoyer des données au serveur
                 NetworkStream stream = Client.GetStream();
 
-                // Convertir le message en un tableau d'octets
-                byte[] data = System.Text.Encoding.ASCII.GetBytes(request);
-
-                // Envoyer les données au serveur
-                stream.Write(data, 0, data.Length);
+                // Envoyer la requête au serveur
+                var message = Newtonsoft.Json.JsonConvert.SerializeObject(request);
+                var buffer = Encoding.Unicode.GetBytes(message);
+                stream.Write(buffer, 0, buffer.Length);
 
                 Console.WriteLine("Sent: {0}", request);
 
                 // recevoir une reponse
-                //request =...
                 GetResponse(stream, request.Split(':'));
             }
         }
@@ -67,6 +68,11 @@ class MyTCPClient
             {
                 case "RunBackups":
                 {
+                    object responseFromServer = WaitForResponse(stream, typeof(string));
+                    if (responseFromServer is string)
+                    {
+                        Console.WriteLine("Received on client : " + responseFromServer);
+                    }
                     break;
                 }
                 case "RunSpecificBackup":
@@ -81,17 +87,21 @@ class MyTCPClient
                 {
                     break;
                 }
-                case "SetLanguage":
-                {
-                    break;
-                }
-                case "GetLanguage":
-                {
-                    break;
-                }
                 case "GetAllBackups":
                 {
-
+                    object listOfBackups = WaitForResponse(stream, typeof(List<BackupInfos>));
+                    if (listOfBackups is List<BackupInfos>)
+                    {
+                        foreach(object backupInfo in (List<BackupInfos>)listOfBackups)
+                        {
+                            //BackupInfoStruct backupInfoss = Newtonsoft.Json.JsonConvert.DeserializeObject<BackupInfoStruct>(backupInfo);
+                            Console.WriteLine("backupname : " + ((BackupInfos)backupInfo).BackupName + 
+                                ", pathSource = " + ((BackupInfos)backupInfo).SourceDir + 
+                                ", pathTarget = " + ((BackupInfos)backupInfo).TargetDir + 
+                                ", type = " + ((BackupInfos)backupInfo).BackupType + 
+                                ", index = " + ((BackupInfos)backupInfo).Index);
+                        }
+                    }
                     break;
                 }
                 case "RestoreBackup":
@@ -107,5 +117,26 @@ class MyTCPClient
                     break;
                 }
             }
+    }
+
+    private object WaitForResponse(NetworkStream stream, Type typeOfAnswerExpected)
+    {
+        object? response = new object();
+
+        Byte[] bytes = new Byte[8096];
+
+        int i;
+        // Translate data bytes to a Unicode string.
+        var message = Encoding.Unicode.GetString(bytes, 0, stream.Read(bytes, 0, bytes.Length));
+        try
+        {
+            response = Newtonsoft.Json.JsonConvert.DeserializeObject(message, typeOfAnswerExpected);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Exception deserializing message on server : {0}", e);
+        }
+        if (response == null) response = new object();
+        return response;
     }
 }

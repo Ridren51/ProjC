@@ -16,6 +16,7 @@ using EasySave_CLI.Model.Logs;
 
 namespace EasySave_CLI.Model
 {
+    [Serializable]
     internal class BackupJob : IBackupJob
     {
         private string _name;
@@ -36,14 +37,10 @@ namespace EasySave_CLI.Model
             return this._name;
         }
 
-        public BackupInfoStruct GetBackupInfos()
+        public BackupInfos GetBackupInfos()
         {
-            BackupInfoStruct backupInfo;
-            backupInfo.BackupName = _name;
-            backupInfo.SourceDir = _sourceDirectory;
-            backupInfo.targetDir = _targetDirectory;
-            backupInfo.BackupType = Enum.GetName(Type);
-            return backupInfo;
+            //TEMP : index value is temporary
+            return new BackupInfos(_name, _sourceDirectory, _targetDirectory, Enum.GetName(Type), 0);
         }
         public async Task DoBackup()
         {
