@@ -8,6 +8,7 @@ namespace AppCore.Model.Backup
 {
     internal interface IBackupJob
     {
-        public Task DoBackup();
+        public Task AsyncDoBackup();
+        public void DoBackup();
     }
 }

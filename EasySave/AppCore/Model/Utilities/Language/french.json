@@ -1,0 +1,13 @@
+{
+    "Option": "Choisissez une option:",
+    "HelpText": "1- Lancer les backups\n2- Lancer une backup specifique\n3- Ajouter une backup\n4- Supprimer une backup\n5- Afficher les backups\n6- Restaurer une backup\n7- Choisir une langue\n8- Quitter\necrivez aide pour afficher ce message\n",
+    "QueueFull": "La file de backup est pleine, veuillez supprimer une backup svp",
+    "EnterName": "Choisissez un nom pour la backup",
+    "InvalidBackupArgument": "Une erreur est survenue lors de la creation de la backup, veuillez verifier les arguments et reessayer",
+    "EnterIndex": "Entrez le numero de la backup a supprimer",
+    "SourceDirectory": "Entrez le repertoire d entree",
+    "TargetDirectory": "Entrez le repertoire de sortie",
+    "BackupType": "Choisissez un type de backup:\n 1- differentielle\n 2- standard",
+    "BackupDelay": "Choisissez un delai pour la backup",
+    "SpecificBackup": "Choisissez quel backup lancer"
+}

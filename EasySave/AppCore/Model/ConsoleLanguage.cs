@@ -1,7 +1,9 @@
-﻿using System;
+﻿using AppCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EasySave_CLI.View
@@ -14,6 +16,7 @@ namespace EasySave_CLI.View
         public ConsoleLanguage()
         {
             _languages = new Dictionary<string, Dictionary<string, string>>();
+            GenerateAllLanguages();
             _currentLanguage = "English";
         }
 
@@ -38,6 +41,37 @@ namespace EasySave_CLI.View
             }
 
             return string.Empty;
+        }
+
+        private void GenerateLanguage(string path, string language)
+        {
+            var jsonString = File.ReadAllText(PathHandler.getRelativePath(path));
+            var lang = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
+            this.AddLanguage(language, lang);
+        }
+        private void GenerateEnglishLanguage()
+        {
+            GenerateLanguage("AppCore\\Model\\Utilities\\Language\\english.json", "English");
+        }
+
+        private void GenerateFrenchLanguage()
+        {
+            GenerateLanguage("AppCore\\Model\\Utilities\\Language\\french.json", "Français");
+        }
+        private void GenerateItalianLanguage()
+        {
+            GenerateLanguage("AppCore\\Model\\Utilities\\Language\\italian.json", "Italian");
+        }
+        private void GenerateArabicLanguage()
+        {
+            GenerateLanguage("AppCore\\Model\\Utilities\\Language\\arabic.json", "Arabic");
+        }
+        private void GenerateAllLanguages()
+        {
+            GenerateEnglishLanguage();
+            GenerateArabicLanguage();
+            GenerateItalianLanguage();
+            GenerateFrenchLanguage();
         }
     }
 
