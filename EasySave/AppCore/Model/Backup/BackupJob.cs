@@ -16,6 +16,7 @@ using System.Text.Json;
 
 namespace AppCore.Model.Backup
 {
+    [Serializable]
     public class BackupJob : IBackupJob
     {
         private string _name;
@@ -49,6 +50,12 @@ namespace AppCore.Model.Backup
                 this._targetDirectory,
                 type = this.Type.ToString(),
             }, options);
+        }
+
+        public BackupInfos GetBackupInfos()
+        {
+            //TEMP : index value is temporary
+            return new BackupInfos(_name, _sourceDirectory, _targetDirectory, Enum.GetName(Type), 0);
         }
         public async Task DoBackup()
         {
