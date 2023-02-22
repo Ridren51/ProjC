@@ -7,6 +7,7 @@
         x:Class="EasySave_WPF.MainWindow"
         Title="EasySave_WPF"
         Width="1000"
+		Icon="\Content\Play.png"
 		Height="700">
 	<Window.Styles>
 		<StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
@@ -17,6 +18,8 @@
 	<Window.MinWidth>600</Window.MinWidth>
 	<Window.MinHeight>400</Window.MinHeight>
 	<Window.Background>#2c2f33</Window.Background>
+	
+	
 <Grid RowDefinitions="Auto,Auto">
 	<Grid ShowGridLines="False" Background="#23272a" VerticalAlignment="Top">
 		<Grid.ColumnDefinitions>
@@ -89,12 +92,13 @@
 				<TabItem.Header>
 					<TextBlock>🏠 </TextBlock>
 				</TabItem.Header>
-				<DataGrid Margin="10" Grid.Row="0" Background="#99aab5" HorizontalAlignment="Center">
+				<DataGrid Name="Var" Margin="10" Grid.Row="0" Background="#99aab5" HorizontalAlignment="Center">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="▼" Width="Auto"/>
-						<DataGridTextColumn Header="Name" Width="Auto" />
-						<DataGridTextColumn Header="SourcePath" Width="Auto"/>
-						<DataGridTextColumn Header="TargetPath"	Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding Key1}" Header="Name" Width="Auto" />
+						<DataGridTextColumn Binding="{Binding Key2}" Header="SourcePath" Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding Key3}" Header="TargetPath"	Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding Key4}" Header="type" Width="Auto" />
 					</DataGrid.Columns>
 				</DataGrid>
 			</TabItem>
@@ -129,13 +133,14 @@
 				<TabItem.Header>
 					<TextBlock>📋</TextBlock>
 				</TabItem.Header>
-				<DataGrid Margin="10" Grid.Row="0" Background="#99aab5" HorizontalAlignment="Center">
+				<DataGrid Name="Logs" Margin="10" Grid.Row="0" Background="#99aab5" HorizontalAlignment="Center">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="▼" Width="Auto"/>
-						<DataGridTextColumn Header="Name" Width="Auto" />
-						<DataGridTextColumn Header="SourcePath" Width="Auto"/>
-						<DataGridTextColumn Header="TargetPath"	Width="Auto"/>
-						<DataGridTextColumn Header="Type" Width="Auto"></DataGridTextColumn>
+						<DataGridTextColumn Header="Name" Binding="{Binding Key}" Width="Auto" />
+						<DataGridTextColumn Header="SourcePath" Binding="{Binding Key}" Width="Auto"/>
+						<DataGridTextColumn Header="TargetPath" Binding="{Binding Key}" Width="Auto"/>
+						<DataGridTextColumn Header="Type" Binding="{Binding Key}" Width="Auto"/>
+
 					</DataGrid.Columns>
 				</DataGrid>
 			</TabItem>
