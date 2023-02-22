@@ -11,12 +11,11 @@ namespace EasySave_CLI.ViewModel
     {
         public List<BackupJob> BackupJobs { get; set; }
         public ConsoleLanguage ConsoleLanguage { get; set; }
-        //ManagementEventWatcher watcher;
         public WPFAdapter()
         {
             BackupJobs = new List<BackupJob>();
             BackupJobs.Capacity = 5;
-            ConsoleLanguage = new ConsoleLanguage();;
+            ConsoleLanguage = new ConsoleLanguage();
             ConsoleLanguage.SetLanguage("English");
 
         }

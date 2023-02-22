@@ -19,6 +19,9 @@ namespace EasySave_CLI.View
         {
             _adapter = new WPFAdapter();
             _consoleLanguage = _adapter.ConsoleLanguage;
+            Console.InputEncoding = Encoding.UTF8;
+            Console.OutputEncoding = Encoding.UTF8;
+
         }
         public static View Instance
         {
@@ -70,13 +73,6 @@ namespace EasySave_CLI.View
                     SetLanguage(); break;
                 case 8:
                     System.Environment.Exit(0); break;
-                case 9:
-                    _adapter.PauseBackup(0);
-                    break;
-                case 10:
-                    _adapter.ResumeBackup(0);
-                    break;
-
                 default:
                     Console.Clear(); ShowHelp(); break;
             }
@@ -92,12 +88,17 @@ namespace EasySave_CLI.View
         {
             Console.WriteLine("1- English");
             Console.WriteLine("2- Francais");
+            Console.WriteLine("3- Italian");
+            Console.WriteLine("4- Arabic");
             if (int.TryParse(Console.ReadLine(), out int language))
             {
                 switch (language)
                 {
                     case 1: _adapter.SetLanguage(_adapter.GetEnglishLanguage()); break;
                     case 2: _adapter.SetLanguage(_adapter.GetFrenchLanguage()); break;
+                    case 3: _adapter.SetLanguage(_adapter.GetItalianLanguage()); break;
+                    case 4: _adapter.SetLanguage(_adapter.GetArabicLanguage()); break;
+
 
                 }
                 Console.Clear();
