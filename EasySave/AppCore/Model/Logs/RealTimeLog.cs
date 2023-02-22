@@ -20,7 +20,7 @@ namespace EasySave_CLI.Model.Logs
             _totalFiles = totalFiles;
             _filesLeft = totalFiles;
             _logPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                "\\state";
+                "\\state.";
         }
         public override void UpdateLog(ITransferFile file)
         {
