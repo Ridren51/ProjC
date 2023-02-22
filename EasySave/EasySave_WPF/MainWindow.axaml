@@ -6,92 +6,140 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="EasySave_WPF.MainWindow"
         Title="EasySave_WPF"
-        Width="600"
-		Height="500">
+        Width="1000"
+		Height="700">
 	<Window.Styles>
+		<StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
+		<StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
 		<FluentTheme Mode="Light" />
 	</Window.Styles>
 	<Window.MinWidth>600</Window.MinWidth>
 	<Window.MinHeight>400</Window.MinHeight>
 	<Window.Background>#2c2f33</Window.Background>
 <Grid RowDefinitions="Auto,Auto">
-	<Grid Grid.Row="0" VerticalAlignment="Top" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
-		<Grid Grid.Row="0"  ShowGridLines="False" Background="#23272a">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
-			<Button Grid.Row="0" Grid.Column="0" Content="" Height="30" Width="150" Margin="10" Background="White">
-				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Logo.png" Height="30" />
-			</Button>
-			<Button Grid.Row="0" Grid.Column="2" Content=""	Width="30" Height="30" Margin="10">
-				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Play.png" Width="30" Height="30" />
-			</Button>
-			<Button Grid.Row="0" Grid.Column="3" Content=""	Width="30" Height="30" Margin="10">
-				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Stop.png" Width="30" Height="30" />
-			</Button>
-			<Button Grid.Row="0" Grid.Column="4" Content=""	Width="30" Height="30" Margin="10">
-				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Pause.png" Width="30" Height="30" />
-			</Button>
-			<Button Grid.Row="0" Grid.Column="6" Content=""	Width="30" Height="30" Margin="10" HorizontalAlignment="Right">
-				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Historic.png" Width="30" Height="30" />
-			</Button>
-			<Button Grid.Row="0" Grid.Column="7" Content=""	Width="30" Height="30" Margin="10" HorizontalAlignment="Right">
-				<Image Source="C:\Users\cleme\OneDrive\Bureau\Pro4\Ridren51\ProjC\EasySave\EasySave_WPF\Content\Gear.png" Width="30" Height="30" />
-				<Button.Flyout>
-					<Flyout Placement="Bottom">
-						<ComboBox SelectedIndex="0">
-							<ComboBoxItem>EN</ComboBoxItem>
-							<ComboBoxItem>FR</ComboBoxItem>
-						</ComboBox>
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-		</Grid>
+	<Grid ShowGridLines="False" Background="#23272a" VerticalAlignment="Top">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<ProgressBar Grid.Row="0" Grid.Column="0" Width="10" Height="20" Value="10" Margin="10" HorizontalAlignment="Left"></ProgressBar>
+		<Button Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="▶️ " Background="White" Width="35" Height="35" Margin="10" CornerRadius="10"></Button>
+		<Button Grid.Row="0" Grid.Column="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content=" ⬛ " Background="White" Width="35" Height="35" Margin="10" CornerRadius="10"></Button>
+		<Button Grid.Row="0" Grid.Column="4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="II" Background="White" Width="35" Height="35" Margin="10" CornerRadius="10"></Button>
+		<Button Grid.Row="0" Grid.Column="6" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"  Content="⚙️" Background="White" Width="35" Height="35" Margin="10" CornerRadius="10">
+			<Button.Flyout>
+				<Flyout Placement="Bottom">
+					<StackPanel>
+						<Panel>
+							<TextBlock>Language</TextBlock>
+						</Panel>
+						<Panel Margin="10">
+							<ComboBox SelectedIndex="0">
+								<ComboBoxItem>EN</ComboBoxItem>
+								<ComboBoxItem>FR</ComboBoxItem>
+							</ComboBox>
+						</Panel>
+						<Panel>
+							<TextBlock>New Extension Priority</TextBlock>
+						</Panel>
+						<Panel Margin="10">
+							<TextBox MinWidth="100"></TextBox>
+							<Button HorizontalAlignment="Right" Content="+"></Button>
+						</Panel>
+						<Panel>
+							<TextBlock>New Crypt Extension</TextBlock>
+						</Panel>
+						<Panel Margin="10">
+							<TextBox MinWidth="100"></TextBox>
+							<Button HorizontalAlignment="Right" Content="+"></Button>
+						</Panel>
+						<Panel>
+							<TextBlock>Big File Size</TextBlock>
+						</Panel>
+						<Panel Margin="10">
+							<TextBox MinWidth="50"></TextBox>
+							<Button HorizontalAlignment="Right" Content="+"></Button>
+						</Panel>
+					</StackPanel>
+
+
+				</Flyout>
+			</Button.Flyout>
+		</Button>
 	</Grid>
-	<Grid Grid.Row="1">
-		<Border  CornerRadius="10" BorderBrush="White">
-			<TabControl TabStripPlacement="Left" Margin="10" CornerRadius="10">
-				<TabItem  Background="#99aab5" Header="▶️ Backups" CornerRadius="10">
-					<Grid Background="#99aab5">
-						
-					</Grid>
-				</TabItem>
-				<TabItem Background="#99aab5" Header="📋 Backups" CornerRadius="10">
-					<Grid Background="#99aab5" VerticalAlignment="Top" HorizontalAlignment="Left">
-						<Menu DockPanel.Dock="Top">
-							<MenuItem Header="New">
-								<MenuItem Header="Full">
-									<TextBlock>Name :</TextBlock>
-									<TextBox Name="BackupName"></TextBox>
-								</MenuItem>
-								<Separator/>
-								<MenuItem Header="Diferential"/>
-							</MenuItem>
-							<MenuItem Header="Edit">
-								<MenuItem Header=""/>
-								<Separator/>
-								<MenuItem Header=""/>
-							</MenuItem>
-						</Menu>	
-					</Grid>
-				</TabItem>
-				<TabItem Background="#99aab5" Header="↩️ Queue" CornerRadius="10">
-					<Grid Background="#99aab5">
-					
-					</Grid>
-				</TabItem>
-			</TabControl>
-		</Border>
+	<Grid Grid.Row="1" ShowGridLines="False" VerticalAlignment="Top">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"></RowDefinition>
+		</Grid.RowDefinitions>
+		<TabControl>
+			<TabItem Grid.Column="0">
+				<TabItem.Header>
+					<TextBlock>🏠 </TextBlock>
+				</TabItem.Header>
+				<DataGrid Margin="10" Grid.Row="0" Background="#99aab5" HorizontalAlignment="Center">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="▼" Width="Auto"/>
+						<DataGridTextColumn Header="Name" Width="Auto" />
+						<DataGridTextColumn Header="SourcePath" Width="Auto"/>
+						<DataGridTextColumn Header="TargetPath"	Width="Auto"/>
+					</DataGrid.Columns>
+				</DataGrid>
+			</TabItem>
+			<TabItem Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center">
+				<TabItem.Header>
+					<TextBlock> ➕ </TextBlock>
+				</TabItem.Header>
+				<StackPanel Margin="10" Background="#99aab5" HorizontalAlignment="Center">
+					<TextBlock Padding="10"> New Backup </TextBlock>
+					<Panel Margin="10">
+						<ComboBox SelectedIndex="0">
+							<ComboBoxItem>Full</ComboBoxItem>
+							<ComboBoxItem>Differential</ComboBoxItem>
+						</ComboBox>
+					</Panel>
+					<TextBlock Padding="10">Name :</TextBlock>
+					<Panel Margin="10">
+						<TextBox MinWidth="300"></TextBox>
+					</Panel>
+					<TextBlock Padding="10">SourcePath : </TextBlock>
+					<Panel Margin="10">
+						<TextBox MinWidth="300"></TextBox>
+					</Panel>
+					<TextBlock Padding="10">TargetPath : </TextBlock>
+					<Panel Margin="10">
+						<TextBox MinWidth="300"></TextBox>
+					</Panel>
+					<Button Margin="10">Add +</Button>
+				</StackPanel>
+			</TabItem>
+			<TabItem Grid.Row="0" Grid.Column="0">
+				<TabItem.Header>
+					<TextBlock>📋</TextBlock>
+				</TabItem.Header>
+				<DataGrid Margin="10" Grid.Row="0" Background="#99aab5" HorizontalAlignment="Center">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="▼" Width="Auto"/>
+						<DataGridTextColumn Header="Name" Width="Auto" />
+						<DataGridTextColumn Header="SourcePath" Width="Auto"/>
+						<DataGridTextColumn Header="TargetPath"	Width="Auto"/>
+						<DataGridTextColumn Header="Type" Width="Auto"></DataGridTextColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+			</TabItem>
+		</TabControl>
 	</Grid>
 </Grid>
 </Window>
