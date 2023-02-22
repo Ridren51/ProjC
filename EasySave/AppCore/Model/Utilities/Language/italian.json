@@ -1,0 +1,13 @@
+﻿{
+  "Option": "Selezionare un'opzione:",
+  "HelpText": "1- Esegui il backup\n2- Esegui backup specifico\n3- Aggiungi lavoro di backup\n4- Rimuovi lavoro di backup\n5- Mostra coda di backup\n6- Ripristina il backup\n7- Scegli la lingua\n8- Esci\nUtilizzare aiuto per mostrare questo messaggio\n",
+  "QueueFull": "La coda è piena, eliminare un backup",
+  "EnterName": "Scegliere un nome per il backup",
+  "InvalidBackupArgument": "Si è verificato un errore durante la creazione del backup, controllare il nome e il percorso inseriti e riprovare",
+  "EnterIndex": "Inserire il numero del backup da eliminare",
+  "SourceDirectory": "Inserire la directory di origine",
+  "TargetDirectory": "Inserire la directory di destinazione",
+  "BackupType": "Selezionare un tipo di backup:\n 1- differenziale\n 2- standard",
+  "BackupDelay": "Inserire il ritardo del backup differenziale",
+  "SpecificBackup": "Scegliere quale backup avviare"
+}

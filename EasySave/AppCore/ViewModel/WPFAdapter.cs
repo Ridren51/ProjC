@@ -1,14 +1,9 @@
 ﻿using AppCore.Model.Backup;
 using AppCore.Model.Utilities;
 using EasySave_CLI.View;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+using System;
+using System.Text.Json;
 
 namespace EasySave_CLI.ViewModel
 {
@@ -16,15 +11,13 @@ namespace EasySave_CLI.ViewModel
     {
         public List<BackupJob> BackupJobs { get; set; }
         public ConsoleLanguage ConsoleLanguage { get; set; }
+        //ManagementEventWatcher watcher;
         public WPFAdapter()
         {
             BackupJobs = new List<BackupJob>();
             BackupJobs.Capacity = 5;
-            ConsoleLanguage = new ConsoleLanguage();
-            GenerateEnglishLanguage();
-            GenerateFrenchLanguage();
+            ConsoleLanguage = new ConsoleLanguage();;
             ConsoleLanguage.SetLanguage("English");
-            Config.AddCryptingExtension(".txt");
 
         }
 
@@ -32,7 +25,7 @@ namespace EasySave_CLI.ViewModel
         {
             await Task.Run(() =>
             {
-                BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type, ref Config.CryptingExtension, ref Config.HeavyFileSize));
+                BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type, Config.CryptingExtension, Config.HeavyFileSize));
             });
         }
         public async void PauseBackup(int index)
@@ -103,46 +96,6 @@ namespace EasySave_CLI.ViewModel
             });
         }
 
-        private void GenerateEnglishLanguage()
-        {
-            var english = new Dictionary<string, string>
-                {
-                    {"Option", "Please choose an option:" },
-                    {"HelpText", "1- Run backups\n2- Run specific backup\n3- Add backup job\n4- Remove backup job\n5- Show backup queue\n6- Restore backup\n7- Choose language\n8- exit\nUse help to show this message\n" },
-                    {"QueueFull", "Queue is full please delete a backup" },
-                    {"EnterName", "Choose a name for the backup" },
-                    {"InvalidBackupArgument", "There was an error while creating the backup, check the name and path entered and please try again" },
-                    {"EnterIndex", "Enter the number of the backup to delete" },
-                    {"SourceDirectory", "Enter the source directory" },
-                    {"TargetDirectory", "Enter the target directory" },
-                    {"BackupType", "Select a backup type:\n 1- differential\n 2- standard" },
-                    {"BackupDelay", "Enter differential backup delay" },
-                    {"SpecificBackup", "Choose which backup to start" },
-                };
-            ConsoleLanguage.AddLanguage("English", english);
-
-        }
-        private void GenerateFrenchLanguage()
-        {
-            var francais = new Dictionary<string, string>
-                {
-                    {"Option", "Choisissez une option:" },
-                    {"HelpText", "1- Lancer les backups\n2- Lancer une backup specifique\n3- Ajouter une backup\n4- Supprimer une backup\n5- Afficher les backups\n6- Restaurer une backup\n7- " +
-                    "Choisir une langue\n8- Quitter\necrivez aide pour afficher ce message\n" },
-                    {"QueueFull", "La file de backup est pleine, veuillez supprimer une backup svp" },
-                    {"EnterName", "Choisissez un nom pour la backup" },
-                    {"InvalidBackupArgument", "Une erreur est survenue lors de la creation de la backup, veuillez verifier les arguments et reessayer" },
-                    {"EnterIndex", "Entrez le numero de la backup a supprimer" },
-                    {"SourceDirectory", "Entrez le repertoire d entree" },
-                    {"TargetDirectory", "Entrez le repertoire de sortie" },
-                    {"BackupType", "Choisissez un type de backup:\n 1- differentielle\n 2- standard" },
-                    {"BackupDelay", "Choisissez un delai pour la backup" },
-                    {"SpecificBackup", "Choisissez quel backup lancer" },
-                };
-            ConsoleLanguage.AddLanguage("Francais", francais);
-
-        }
-
         public void SetLanguage(string language)
         {
             ConsoleLanguage.SetLanguage(language);
@@ -150,11 +103,19 @@ namespace EasySave_CLI.ViewModel
 
         public string GetFrenchLanguage()
         {
-            return "Francais";
+            return "Français";
         }
         public string GetEnglishLanguage()
         {
             return "English";
+        }
+        public string GetArabicLanguage()
+        {
+            return "Arabic";
+        }
+        public string GetItalianLanguage()
+        {
+            return "Italian";
         }
         static string GetEnumDescription(Enum value)
         {
