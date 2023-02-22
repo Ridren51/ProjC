@@ -31,7 +31,7 @@ namespace AppCore.Model.Backup
 
         public BackupEnum Type { get; set; }
         public BackupJob(string name, string sourceDirectory, string targetDirectory,
-            BackupEnum type, ref List<string> extensionToCrypt, ref double heavyFileSize)
+            BackupEnum type, List<string> extensionToCrypt, double heavyFileSize)
         {
             _name = name;
             _sourceDirectory = sourceDirectory;
@@ -63,9 +63,9 @@ namespace AppCore.Model.Backup
             };
             return JsonSerializer.Serialize(new
             {
-                this._name,
-                this._sourceDirectory,
-                this._targetDirectory,
+                name = this._name,
+                SourceDirectory = this._sourceDirectory,
+                TargetDirectory = this._targetDirectory,
                 type = this.Type.ToString(),
             }, options);
         }
