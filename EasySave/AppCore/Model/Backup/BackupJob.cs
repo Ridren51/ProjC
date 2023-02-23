@@ -18,6 +18,7 @@ using AppCore.Model.Utilities;
 
 namespace AppCore.Model.Backup
 {
+    [Serializable]
     public class BackupJob : IBackupJob
     {
         private readonly string _name;
@@ -85,6 +86,11 @@ namespace AppCore.Model.Backup
         public void ResumeBackup()
         {
             _pauseEvent.Set();
+        }
+        public BackupInfos GetBackupInfos()
+        {
+            //TEMP : index value is temporary
+            return new BackupInfos(_name, _sourceDirectory, _targetDirectory, Enum.GetName(Type), 0);
         }
         public async Task AsyncDoBackup()
         {
