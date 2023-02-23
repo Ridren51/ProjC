@@ -9,7 +9,9 @@
   <ItemGroup>
     <None Remove=".gitignore" />
   </ItemGroup>
-
+  <ItemGroup>
+	  <AvaloniaResource Include="Content\**"/>
+  </ItemGroup>
   <ItemGroup>
     <TrimmerRootDescriptor Include="Roots.xml" />
   </ItemGroup>

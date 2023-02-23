@@ -3,7 +3,15 @@ using AppCore.Model.Utilities;
 using EasySave_CLI.View;
 using System.Text;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using AppCore.Model;
 
 namespace EasySave_CLI.ViewModel
 {
@@ -65,6 +73,19 @@ namespace EasySave_CLI.ViewModel
         {
             return BackupJobs[index];
         }
+
+        public List<BackupJob> GetBackupJobs()
+        {
+            List<BackupJob> Grid = new List<BackupJob> { };
+            for (int i = 0; i < BackupJobs.Count; i++)
+            {
+                Grid.Add(BackupJobs[i]);
+
+            }
+            return Grid;
+        }
+
+
         public Boolean IsNameValid(string? name)
         {
             return !string.IsNullOrEmpty(name);
@@ -82,6 +103,7 @@ namespace EasySave_CLI.ViewModel
                 History.WriteHistory(BackupJobs[index]);
             });
         }
+
         public async void RunAllBackups()
         {
             await Task.Run(() =>
