@@ -39,12 +39,11 @@ namespace AppCore.Model.TCPInteractions
                 // Enter the listening loop.
                 while (true)
                 {
-                    Console.Write("Waiting for a connection... ");
+                    //Console.Write("Waiting for a connection... ");
 
                     // Perform a blocking call to accept requests.
-                    // You could also use server.AcceptSocket() here.
                     using TcpClient client = server.AcceptTcpClient();
-                    Console.WriteLine("Connected!");
+                    //Console.WriteLine("Connected!");
 
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
@@ -64,7 +63,7 @@ namespace AppCore.Model.TCPInteractions
 
                                 if (data is string)
                                 {
-                                    Console.WriteLine("Received on server: {0}", (string)data);
+                                    //Console.WriteLine("Received on server: {0}", (string)data);
                                     ProcessRequest(((string)data).Split(':'), stream);
                                 }
                             }
@@ -90,8 +89,8 @@ namespace AppCore.Model.TCPInteractions
                     server.Stop();
             }
 
-            Console.WriteLine("\nHit enter to continue...");
-            Console.Read();
+            //Console.WriteLine("\nHit enter to continue...");
+            //Console.Read();
         }
 
         private static void ProcessRequest(string[] request, NetworkStream stream)

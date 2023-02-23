@@ -1,0 +1,13 @@
+﻿{
+    "Option": "Please choose an option:",
+    "HelpText": "1- Run backups\n2- Run specific backup\n3- Add backup job\n4- Remove backup job\n5- Show backup queue\n6- Restore backup\n7- Choose language\n8- exit\nUse help to show this message\n",
+    "QueueFull": "Queue is full please delete a backup",
+    "EnterName": "Choose a name for the backup",
+    "InvalidBackupArgument": "There was an error while creating the backup, check the name and path entered and please try again",
+    "EnterIndex": "Enter the number of the backup to delete",
+    "SourceDirectory": "Enter the source directory",
+    "TargetDirectory": "Enter the target directory",
+    "BackupType": "Select a backup type:\n 1- differential\n 2- standard",
+    "BackupDelay": "Enter differential backup delay",
+    "SpecificBackup": "Choose which backup to start"
+}

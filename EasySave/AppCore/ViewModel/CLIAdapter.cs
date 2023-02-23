@@ -60,7 +60,7 @@ namespace EasySave_CLI.ViewModel
 
         public async void RunSpecificBackup(int index)
         {
-            await BackupJobs[index].DoBackup();
+            await BackupJobs[index].AsyncDoBackup();
             History.WriteHistory(BackupJobs[index]);
             BackupJobs.RemoveAt(index);
         }
@@ -69,7 +69,7 @@ namespace EasySave_CLI.ViewModel
             List<BackupJob> backupJobsCopy = BackupJobs.ToList();
             foreach(BackupJob backup in backupJobsCopy)
             {
-                await backup.DoBackup();
+                await backup.AsyncDoBackup();
                 History.WriteHistory(backup);
                 BackupJobs.Remove(backup);
             }

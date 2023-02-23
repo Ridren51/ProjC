@@ -13,15 +13,7 @@ namespace AppCore.Model.TCPInteractions
         private List<BackupJob> BackupJobs { get; set; }
         public RequestHandler()
         {
-            BackupJobs = new List<BackupJob>
-            {
-                //TEMP : test values
-                new BackupJob("abc", "pathsource0", "pathtarget0", BackupEnum.Differential),
-                new BackupJob("123", "pathsource1", "pathtarget1", BackupEnum.Full),
-                new BackupJob("bob", "pathsource2", "pathtarget2", BackupEnum.Differential),
-                new BackupJob("harry", "pathsource3", "pathtarget3", BackupEnum.Full),
-                new BackupJob("yahoo", "pathsource4", "pathtarget4", BackupEnum.Full)
-            };
+            BackupJobs = new List<BackupJob>();
         }
         public void AddBackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
@@ -80,17 +72,9 @@ namespace AppCore.Model.TCPInteractions
 
         public async void RunSpecificBackup(int index)
         {
-            await BackupJobs[index].DoBackup();
-            BackupJobs.RemoveAt(index);
         }
         public async void RunAllBackups()
         {
-            List<BackupJob> backupJobsCopy = BackupJobs.ToList();
-            foreach (BackupJob backup in backupJobsCopy)
-            {
-                await backup.DoBackup();
-                BackupJobs.Remove(backup);
-            }
         }
         static string GetEnumDescription(Enum value)
         {

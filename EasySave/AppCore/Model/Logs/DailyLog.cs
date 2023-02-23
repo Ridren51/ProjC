@@ -13,14 +13,15 @@ namespace EasySave_CLI.Model.Logs
         public DailyLog()
         {
             _logPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                "\\daily.json";
+                "\\daily.";
         }
 
         public override void UpdateLog(ITransferFile file)
         {
+            string pathToLog = _logPath + LogManager.logFormat.ToString().ToLower();
             if (!File.Exists(_logPath))
                 CreateLogFile();
-            using (StreamWriter sw = new StreamWriter(_logPath, true))
+            using (StreamWriter sw = new StreamWriter(pathToLog, true))
             {
                 sw.WriteLine(getLog(file, LogManager.logFormat));
             }

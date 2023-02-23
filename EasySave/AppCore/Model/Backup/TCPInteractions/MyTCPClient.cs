@@ -20,7 +20,7 @@ namespace AppCore.Model.TCPInteractions
                 // Connect the client to the TCP Listener
                 Client.Connect("127.0.0.1", 23805);
 
-                Console.WriteLine("Connected to server!");
+                //Console.WriteLine("Connected to server!");
             }
             catch (SocketException e)
             {
@@ -51,7 +51,7 @@ namespace AppCore.Model.TCPInteractions
                     var buffer = Encoding.Unicode.GetBytes(message);
                     stream.Write(buffer, 0, buffer.Length);
 
-                    Console.WriteLine("Sent: {0}", request);
+                    //Console.WriteLine("Sent: {0}", request);
 
                     // Get a response from the server
                     GetResponse(stream, request.Split(':'));
@@ -72,7 +72,7 @@ namespace AppCore.Model.TCPInteractions
                         object responseFromServer = WaitForResponse(stream, typeof(string));
                         if (responseFromServer is string)
                         {
-                            Console.WriteLine("Received on client : " + responseFromServer);
+                            //Console.WriteLine("Received on client : " + responseFromServer);
                         }
                         break;
                     }
@@ -95,11 +95,11 @@ namespace AppCore.Model.TCPInteractions
                         {
                             foreach (object backupInfo in (List<BackupInfos>)listOfBackups)
                             {
-                                Console.WriteLine("backupname : " + ((BackupInfos)backupInfo).BackupName +
+                                /*Console.WriteLine("backupname : " + ((BackupInfos)backupInfo).BackupName +
                                     ", pathSource = " + ((BackupInfos)backupInfo).SourceDir +
                                     ", pathTarget = " + ((BackupInfos)backupInfo).TargetDir +
                                     ", type = " + ((BackupInfos)backupInfo).BackupType +
-                                    ", index = " + ((BackupInfos)backupInfo).Index);
+                                    ", index = " + ((BackupInfos)backupInfo).Index);*/
                             }
                         }
                         break;
