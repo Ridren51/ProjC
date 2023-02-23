@@ -34,12 +34,20 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-
-		<ProgressBar Grid.Row="0" Grid.Column="0" Width="10" Height="20" Value="10" Margin="10" HorizontalAlignment="Left"></ProgressBar>
-		<Button Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="▶️ " Background="White" Width="35" Height="35" Margin="10" CornerRadius="10"></Button>
-		<Button Grid.Row="0" Grid.Column="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content=" ⬛ " Background="White" Width="35" Height="35" Margin="10" CornerRadius="10"></Button>
-		<Button Grid.Row="0" Grid.Column="4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="II" Background="White" Width="35" Height="35" Margin="10" CornerRadius="10"></Button>
-		<Button Grid.Row="0" Grid.Column="6" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"  Content="⚙️" Background="White" Width="35" Height="35" Margin="10" CornerRadius="10">
+		<Panel Margin="10" Grid.Row="0" Grid.Column="0">
+			<Image Width="100" Height="40">\Content\Logo.png</Image>
+		</Panel>
+		<Button Click="Play" Grid.Row="0" Grid.Column="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content=" "  Width="35" Height="35" Margin="10" CornerRadius="10">
+			<Image Width="35" Height="35">\Content\Play.png</Image>
+		</Button>
+		<Button Name="Delete" Click="DeleteBackup" Grid.Row="0" Grid.Column="4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content=" "  Width="35" Height="35" Margin="10" CornerRadius="10">
+			<Image Width="35" Height="35">\Content\Stop.png</Image>
+		</Button>
+		<Button Grid.Row="0" Grid.Column="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="" Width="35" Height="35" Margin="10" CornerRadius="10">
+			<Image Width="35" Height="35">\Content\Pause.png</Image>
+		</Button>
+		<Button Grid.Row="0" Grid.Column="7" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"  Content=""  Width="35" Height="35" Margin="10" CornerRadius="10">
+			<Image  Width="35" Height="35">\Content\Gear.png</Image>
 			<Button.Flyout>
 				<Flyout Placement="Bottom">
 					<StackPanel>
@@ -92,13 +100,23 @@
 				<TabItem.Header>
 					<TextBlock>🏠 </TextBlock>
 				</TabItem.Header>
-				<DataGrid Name="Var" Margin="10" Grid.Row="0" Background="#99aab5" HorizontalAlignment="Center">
+				<DataGrid Name="Principal" Margin="10" Grid.Row="0" Background="White" HorizontalAlignment="Center">
 					<DataGrid.Columns>
-						<DataGridTextColumn Header="▼" Width="Auto"/>
-						<DataGridTextColumn Binding="{Binding Key1}" Header="Name" Width="Auto" />
-						<DataGridTextColumn Binding="{Binding Key2}" Header="SourcePath" Width="Auto"/>
-						<DataGridTextColumn Binding="{Binding Key3}" Header="TargetPath"	Width="Auto"/>
-						<DataGridTextColumn Binding="{Binding Key4}" Header="type" Width="Auto" />
+						<!--<DataGridTemplateColumn  Width="Auto">
+							<DataGridTemplateColumn.Header>
+								▼
+							</DataGridTemplateColumn.Header>
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox HorizontalContentAlignment="Center" IsChecked="{Binding isCheck}"></CheckBox>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>-->
+						<DataGridCheckBoxColumn>	</DataGridCheckBoxColumn>
+						<DataGridTextColumn Binding="{Binding Name}"  Header="Name" Width="Auto" />
+						<DataGridTextColumn Binding="{Binding SourceDirectory}" Header="SourcePath" Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding TargetDirectory}" Header="TargetPath"	Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding Type}" Header="type" Width="Auto" />
 					</DataGrid.Columns>
 				</DataGrid>
 			</TabItem>
@@ -109,38 +127,39 @@
 				<StackPanel Margin="10" Background="#99aab5" HorizontalAlignment="Center">
 					<TextBlock Padding="10"> New Backup </TextBlock>
 					<Panel Margin="10">
-						<ComboBox SelectedIndex="0">
+						<ComboBox Name="Type" SelectedIndex="0">
 							<ComboBoxItem>Full</ComboBoxItem>
 							<ComboBoxItem>Differential</ComboBoxItem>
 						</ComboBox>
 					</Panel>
-					<TextBlock Padding="10">Name :</TextBlock>
+					<TextBlock  Padding="10">Name :</TextBlock>
 					<Panel Margin="10">
-						<TextBox MinWidth="300"></TextBox>
+						<TextBox Name="TxtName" MinWidth="300"></TextBox>
 					</Panel>
 					<TextBlock Padding="10">SourcePath : </TextBlock>
 					<Panel Margin="10">
-						<TextBox MinWidth="300"></TextBox>
+						<TextBox x:Name="FileSourceTextBox" MinWidth="300"></TextBox>
+						<Button Content="📁" Click="FolderButton" HorizontalAlignment="Right"/>
 					</Panel>
 					<TextBlock Padding="10">TargetPath : </TextBlock>
 					<Panel Margin="10">
-						<TextBox MinWidth="300"></TextBox>
+						<TextBox Text="{Binding targetDirectory}" x:Name="FileTargetTextBox" MinWidth="300"></TextBox>
+						<Button Content="📁" Click="FolderButton" HorizontalAlignment="Right"/>
 					</Panel>
-					<Button Margin="10">Add +</Button>
+					<Button Click="AddBackupJobs" Margin="10">Add +</Button>
 				</StackPanel>
 			</TabItem>
 			<TabItem Grid.Row="0" Grid.Column="0">
 				<TabItem.Header>
 					<TextBlock>📋</TextBlock>
 				</TabItem.Header>
-				<DataGrid Name="Logs" Margin="10" Grid.Row="0" Background="#99aab5" HorizontalAlignment="Center">
+				<DataGrid Name="Central" Margin="10" Grid.Row="0" Background="White" HorizontalAlignment="Center">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="▼" Width="Auto"/>
-						<DataGridTextColumn Header="Name" Binding="{Binding Key}" Width="Auto" />
-						<DataGridTextColumn Header="SourcePath" Binding="{Binding Key}" Width="Auto"/>
-						<DataGridTextColumn Header="TargetPath" Binding="{Binding Key}" Width="Auto"/>
-						<DataGridTextColumn Header="Type" Binding="{Binding Key}" Width="Auto"/>
-
+						<DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" />
+						<DataGridTextColumn Binding="{Binding SourceDirectory}" Header="SourcePath" Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding TargetDirectory}" Header="TargetPath"	Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding type}" Header="type" Width="Auto" />
 					</DataGrid.Columns>
 				</DataGrid>
 			</TabItem>
