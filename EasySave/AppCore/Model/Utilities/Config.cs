@@ -17,7 +17,8 @@ namespace AppCore.Model.Utilities
 
         static Config()
         {
-            LoadFromFile();
+            //LoadFromFile();
+            SaveToFile();
         }
         public static double HeavyFileSize
         {
