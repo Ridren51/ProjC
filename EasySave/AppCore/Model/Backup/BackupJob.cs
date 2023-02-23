@@ -21,10 +21,10 @@ namespace AppCore.Model.Backup
     [Serializable]
     public class BackupJob : IBackupJob
     {
-        private readonly string _name;
-        private readonly string _sourceDirectory;
-        private readonly string _targetDirectory;
-        private readonly List<string> _extensionToCrypt;
+        private string _name;
+        private string _sourceDirectory;
+        private string _targetDirectory;
+        private List<string> _extensionToCrypt;
         private static Semaphore _heavyFile = new Semaphore(1,1);
         private double _heavyFileSize = Config.HeavyFileSize;
         private Thread _backupThread { get; set; }
@@ -41,6 +41,21 @@ namespace AppCore.Model.Backup
             _extensionToCrypt = extensionToCrypt;
             _heavyFileSize=heavyFileSize;
         }
+
+        public BackupJob() { }
+        public string Name
+        {
+            get => _name; set => _name = value;
+        }
+        public string SourceDirectory
+        {
+            get => _sourceDirectory; set => _sourceDirectory = value;
+        }
+        public string TargetDirectory
+        {
+            get => _targetDirectory; set => _targetDirectory = value;
+        }
+
         public BackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
             _name = name;
