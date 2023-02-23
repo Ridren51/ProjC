@@ -63,60 +63,61 @@ namespace AppCore.Model.TCPInteractions
             }
         }
 
-        private void GetResponse(NetworkStream stream, string[] request)
+        private object? GetResponse(NetworkStream stream, string[] request)
         {
+            object? responseFromServer = null;
             switch (request[0])
             {
                 case "RunBackups":
+                {
+                    responseFromServer = WaitForResponse(stream, typeof(string));
+                    if (responseFromServer is string)
                     {
-                        object responseFromServer = WaitForResponse(stream, typeof(string));
-                        if (responseFromServer is string)
-                        {
-                            //Console.WriteLine("Received on client : " + responseFromServer);
-                        }
-                        break;
+                        //Console.WriteLine("Received on client : " + responseFromServer);
                     }
+                    break;
+                }
                 case "RunSpecificBackup":
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 case "AddBackupJob":
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 case "DeleteBackupJob":
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 case "GetAllBackups":
+                {
+                    object listOfBackups = WaitForResponse(stream, typeof(List<BackupInfos>));
+                    if (listOfBackups is List<BackupInfos>)
                     {
-                        object listOfBackups = WaitForResponse(stream, typeof(List<BackupInfos>));
-                        if (listOfBackups is List<BackupInfos>)
-                        {
-                            foreach (object backupInfo in (List<BackupInfos>)listOfBackups)
-                            {
-                                /*Console.WriteLine("backupname : " + ((BackupInfos)backupInfo).BackupName +
-                                    ", pathSource = " + ((BackupInfos)backupInfo).SourceDir +
-                                    ", pathTarget = " + ((BackupInfos)backupInfo).TargetDir +
-                                    ", type = " + ((BackupInfos)backupInfo).BackupType +
-                                    ", index = " + ((BackupInfos)backupInfo).Index);*/
-                            }
-                        }
-                        break;
+                        responseFromServer = listOfBackups;
                     }
+                    break;
+                }
                 case "RestoreBackup":
+                {
+                    break;
+                }
+                case "GetBackupsNames":
+                {
+                    object listOfBackupNames = WaitForResponse(stream, typeof(List<string>));
+                    if (listOfBackupNames is List<string>)
                     {
-                        break;
+                        responseFromServer = listOfBackupNames;
                     }
-                case "GetBackupQueue":
-                    {
-                        break;
-                    }
+                    break;
+                }
                 default:
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
             }
+
+            return responseFromServer;
         }
 
         private object WaitForResponse(NetworkStream stream, Type typeOfAnswerExpected)

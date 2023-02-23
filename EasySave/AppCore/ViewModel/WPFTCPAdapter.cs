@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AppCore.ViewModel
 {
-    public class TCPAdapter : IAdapter
+    public class WPFTCPAdapter : IAdapter
     {
         public List<string> GetBackupsNames()
         {

@@ -100,5 +100,15 @@ namespace AppCore.Model.TCPInteractions
         {
             return (BackupEnum)Enum.ToObject(typeof(BackupEnum), index);
         }
+
+        internal object GetBackupsNames()
+        {
+            List<string> names = new List<string>();
+            foreach (var job in BackupJobs)
+            {
+                names.Add(job.ToString());
+            }
+            return names;
+        }
     }
 }

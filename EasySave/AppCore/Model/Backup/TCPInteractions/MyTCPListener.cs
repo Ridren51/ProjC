@@ -48,7 +48,6 @@ namespace AppCore.Model.TCPInteractions
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
 
-
                     try
                     {
                         int i;
@@ -137,6 +136,11 @@ namespace AppCore.Model.TCPInteractions
                 }
                 case "GetLogTime":
                 {
+                    break;
+                }
+                case "GetBackupsNames":
+                {
+                    SendResponse(requestHandler.GetBackupsNames(), stream);
                     break;
                 }
                 default:
