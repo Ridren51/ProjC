@@ -27,6 +27,14 @@ namespace EasySave_CLI.ViewModel
                 BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type, Config.CryptingExtension, Config.HeavyFileSize));
             });
         }
+        public void AddCryptingExtension(string extension)
+        {
+            Config.AddCryptingExtension(extension);
+        }
+        public void RemoveCryptingExtension(string extension)
+        {
+            Config.AddCryptingExtension(extension);
+        }
         public async void PauseBackup(int index)
         {
             await Task.Run(() =>

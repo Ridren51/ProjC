@@ -100,7 +100,8 @@ namespace AppCore.Model.Backup
                             CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
                         else
                         {
-                            if (File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                            if (File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileTargetPath(sourceDirectoryInfo, 
+                                targetDirectoryInfo, file)))
                                 CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
                             else if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
                                 CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
@@ -128,7 +129,8 @@ namespace AppCore.Model.Backup
                         CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
                     else
                     {
-                        if (File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)))
+                        if (File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)) 
+                            != File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)))
                             CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
                         else if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
                             CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
@@ -219,7 +221,8 @@ namespace AppCore.Model.Backup
                 else
                     file.CopyTo(fileTargetPath, true);
                 stopwatch.Stop();
-                LogManager.UpdateRealTimeLog(realtimeLog, new TransferFile(_name, file.FullName, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds, crypt ? cryptingTime : null));
+                LogManager.UpdateRealTimeLog(realtimeLog, new TransferFile(_name, 
+                    file.FullName, fileTargetPath, file.Length, stopwatch.Elapsed.Milliseconds, crypt ? cryptingTime : null));
                 Console.WriteLine("- " + Name + " : " + Date.ToString() + " - " + +stopwatch.Elapsed.Seconds + " seconds");
             }
 

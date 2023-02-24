@@ -73,6 +73,10 @@ namespace EasySave_CLI.View
                     SetLanguage(); break;
                 case 8:
                     System.Environment.Exit(0); break;
+                case 9:
+                    AddCryptingExtension(); break;
+                case 10:
+                    RemoveCryptingExtension(); break;
                 default:
                     Console.Clear(); ShowHelp(); break;
             }
@@ -83,7 +87,18 @@ namespace EasySave_CLI.View
             Console.WriteLine(_consoleLanguage.GetString("HelpText"));
 
         }
-
+        private void AddCryptingExtension()
+        {
+            Console.WriteLine("Write the extension you want (with the dot)");
+            string extension = Console.ReadLine();
+            _adapter.AddCryptingExtension(extension);
+        }
+        private void RemoveCryptingExtension()
+        {
+            Console.WriteLine("Write the extension you want to remove (with the dot)");
+            string extension = Console.ReadLine();
+            _adapter.RemoveCryptingExtension(extension);
+        }
         private void SetLanguage()
         {
             Console.WriteLine("1- English");

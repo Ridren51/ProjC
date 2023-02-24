@@ -9,11 +9,11 @@ namespace AppCore.Model.Utilities
 {
     internal class Config
     {
-        private static List<string> _cryptingExtension;
-        private static List<string> _priorityExtension;
-        private static List<string> _softwareNames;
-        private static double _heavyFileSize;
-        private static string _lang;
+        private static List<string> _cryptingExtension = new();
+        private static List<string> _priorityExtension = new();
+        private static List<string> _softwareNames = new();
+        private static double _heavyFileSize = 100000000;
+        private static string _lang = "en";
 
         static Config()
         {
