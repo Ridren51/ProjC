@@ -23,7 +23,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        LogsGrid();
     }
 
     WPFTCPAdapter Adapt = new WPFTCPAdapter();
@@ -39,10 +38,10 @@ public partial class MainWindow : Window
         this.Principal.Items = Adapt.GetBackupInfos();
     }
    
-    private void LogsGrid()
+    private void LogsGrid(object sender, RoutedEventArgs e)
     {
         if (File.Exists("C:\\Users\\cleme\\OneDrive\\Documents\\History.json"))
-        {
+        {   
             this.Central.Items = System.Text.Json.JsonSerializer.Deserialize<List<BackupJob>>(File.ReadAllText("C:\\Users\\cleme\\OneDrive\\Documents\\History.json"));
         }
     }
@@ -62,7 +61,8 @@ public partial class MainWindow : Window
         for (int i = 0; i < backupJobs.Count; i++)
         {
             Adapt.RunSpecificBackup(i);
-        }
+        } 
+        
     }
 
     private void PauseBackup(object sender, RoutedEventArgs e)

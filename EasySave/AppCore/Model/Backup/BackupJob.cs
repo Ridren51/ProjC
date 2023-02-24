@@ -44,15 +44,15 @@ namespace AppCore.Model.Backup
 
         public BackupJob() { }
 
-        public string Name
+        public string name
         {
             get => _name; set => _name = value;
         }
-        public string SourceDirectory
+        public string sourceDirectory
         {
             get => _sourceDirectory; set => _sourceDirectory = value;
         }
-        public string TargetDirectory
+        public string targetDirectory
         {
             get => _targetDirectory; set => _targetDirectory = value;
         }

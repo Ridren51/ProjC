@@ -31,6 +31,7 @@
 			<ColumnDefinition Width="Auto"></ColumnDefinition>
 			<ColumnDefinition Width="*"></ColumnDefinition>
 			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -47,11 +48,14 @@
 		<Button Name="Pause" Click="PauseBackup" Grid.Row="0" Grid.Column="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="" Width="35" Height="35" Margin="10" CornerRadius="10">
 			<Image Width="35" Height="35">\Content\Pause.png</Image>
 		</Button>
-		<Button Name="Resume" Click="ResumeBackup" Grid.Row="0" Grid.Column="6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="⏩ " Width="35" Height="35" Margin="10" CornerRadius="10">
+		<Button Name="Resume" Click="ResumeBackup" Grid.Row="0" Grid.Column="6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Width="35" Height="35" Margin="10" CornerRadius="10">
 			<Image Width="35" Height="35">\Content\Resume.png</Image>
 		</Button>
-		<Button Grid.Row="0" Grid.Column="8" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"  Content=""  Width="35" Height="35" Margin="10" CornerRadius="10">
-			<Image  Width="35" Height="35">\Content\Gear.png</Image>
+		<Button Name="Sync" Click="LogsGrid" Grid.Row="0" Grid.Column="7" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="" Width="35" Height="35" Margin="10" CornerRadius="10">
+			<Image Width="35" Height="35">\Content\Pause.png</Image>
+		</Button>
+		<Button Grid.Row="0" Grid.Column="8" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Width="35" Height="35" Margin="10" CornerRadius="10">
+			<Image Width="35" Height="35">\Content\Gear.png</Image>
 			<Button.Flyout>
 				<Flyout Placement="Bottom">
 					<StackPanel>
@@ -86,8 +90,6 @@
 							<Button HorizontalAlignment="Right" Content="+"></Button>
 						</Panel>
 					</StackPanel>
-
-
 				</Flyout>
 			</Button.Flyout>
 		</Button>
@@ -157,12 +159,13 @@
 				<TabItem.Header>
 					<TextBlock>📋</TextBlock>
 				</TabItem.Header>
+				
 				<DataGrid Name="Central" Margin="10" Grid.Row="0" Background="White" HorizontalAlignment="Center">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="▼" Width="Auto"/>
-						<DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="Auto" />
-						<DataGridTextColumn Binding="{Binding SourceDirectory}" Header="SourcePath" Width="Auto"/>
-						<DataGridTextColumn Binding="{Binding TargetDirectory}" Header="TargetPath"	Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding name}" Header="Name" Width="Auto" />
+						<DataGridTextColumn Binding="{Binding sourceDirectory}" Header="SourcePath" Width="Auto"/>
+						<DataGridTextColumn Binding="{Binding targetDirectory}" Header="TargetPath"	Width="Auto"/>
 						<DataGridTextColumn Binding="{Binding type}" Header="type" Width="Auto" />
 					</DataGrid.Columns>
 				</DataGrid>
