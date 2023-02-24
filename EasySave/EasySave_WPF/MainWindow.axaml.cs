@@ -14,6 +14,7 @@ using EasySave_CLI.ViewModel;
 using Avalonia.Animation;
 using System;
 using Avalonia.Input;
+using AppCore.ViewModel;
 
 namespace EasySave_WPF;
 
@@ -25,17 +26,17 @@ public partial class MainWindow : Window
         LogsGrid();
     }
 
-    WPFAdapter Adapt = new WPFAdapter();
+    WPFTCPAdapter Adapt = new WPFTCPAdapter();
     private void AddBackupJobs(object sender, RoutedEventArgs e)
     {
         Adapt.AddBackupJob(TxtName.Text, FileSourceTextBox.Text, FileTargetTextBox.Text, (BackupEnum)Type.SelectedIndex);
-        this.Principal.Items = Adapt.BackupJobs;
+        this.Principal.Items = Adapt.GetBackupInfos();
     }
 
     private void PrincipalGrid(object sender, RoutedEventArgs e)
     {
         this.Principal.Items = "";
-        this.Principal.Items = Adapt.BackupJobs;
+        this.Principal.Items = Adapt.GetBackupInfos();
     }
    
     private void LogsGrid()
@@ -47,9 +48,9 @@ public partial class MainWindow : Window
     }
   
     
-    private List<BackupJob> CellClick()
+    private List<BackupInfos> CellClick()
     {
-        List<BackupJob> dataObjects = Principal.Items.OfType<BackupJob>().ToList();
+        List<BackupInfos> dataObjects = Principal.Items.OfType<BackupInfos>().ToList();
         return dataObjects;
     }
 
@@ -71,7 +72,7 @@ public partial class MainWindow : Window
         {
             Adapt.PauseBackup(Principal.SelectedIndex);
         }
-        this.Principal.Items = Adapt.BackupJobs;
+        this.Principal.Items = Adapt.GetBackupInfos();
     }
 
     private void Resume(object sender, RoutedEventArgs e)
@@ -81,7 +82,7 @@ public partial class MainWindow : Window
         {
             Adapt.ResumeBackup(Principal.SelectedIndex);
         }
-        this.Principal.Items = Adapt.BackupJobs;
+        this.Principal.Items = Adapt.GetBackupInfos();
     }
 
     private void DeleteBackup(object sender, RoutedEventArgs e)
@@ -91,9 +92,13 @@ public partial class MainWindow : Window
         {
             Adapt.RemoveBackupJob(Principal.SelectedIndex);
         }
-        this.Principal.Items = Adapt.BackupJobs;
+        this.Principal.Items = Adapt.GetBackupInfos();
     }
 
+    private void RefreshGrid(object sender, RoutedEventArgs e)
+    {
+        this.Principal.Items = Adapt.GetBackupInfos();
+    }
 
 
 

@@ -1,4 +1,5 @@
-﻿using EasySave_CLI.Model;
+﻿using AppCore.ViewModel;
+using EasySave_CLI.Model;
 using EasySave_CLI.ViewModel;
 using Microsoft.VisualBasic.FileIO;
 using System;

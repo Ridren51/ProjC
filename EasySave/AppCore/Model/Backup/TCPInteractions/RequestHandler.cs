@@ -1,4 +1,5 @@
 ﻿using AppCore.Model.Backup;
+using AppCore.Model.Utilities;
 using EasySave_CLI.View;
 using System;
 using System.Collections.Generic;
@@ -15,52 +16,63 @@ namespace AppCore.Model.TCPInteractions
         {
             BackupJobs = new List<BackupJob>();
         }
-        public void AddBackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
+        public async void AddBackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
-            BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type));
+            await Task.Run(() =>
+            {
+                BackupJobs.Add(new BackupJob(name, sourceDirectory, targetDirectory, type, Config.CryptingExtension, Config.HeavyFileSize));
+            });
         }
-        public void AddBackupJob(string name, string sourceDirectory, string targetDirectory, string type)
+        public async void PauseBackup(int index)
         {
-            BackupEnum enumType;
+            await Task.Run(() =>
+            {
+                BackupJobs[index].PauseBackup();
+            });
+        }
 
-            switch (type)
-            {
-                case "Full":
-                    enumType = BackupEnum.Full;
-                    break;
-                case "Differential":
-                    enumType = BackupEnum.Differential;
-                    break;
-                default:
-                    enumType = BackupEnum.Full;
-                    break;
-            }
-            AddBackupJob(name, sourceDirectory, targetDirectory, enumType);
-        }
-        public void RemoveBackupJob(int index)
+        public async void ResumeBackup(int index)
         {
-            try
+            await Task.Run(() =>
             {
-                BackupJobs.RemoveAt(index);
-            }
-            catch (ArgumentOutOfRangeException)
+                BackupJobs[index].ResumeBackup();
+            });
+        }
+        public Boolean IsBackupQueueFull()
+        {
+            return BackupJobs.Count == 5;
+        }
+
+        public async void RemoveBackupJob(int index)
+        {
+            await Task.Run(() =>
             {
-                return;
-            }
+                try
+                {
+                    BackupJobs.RemoveAt(index);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return;
+                }
+            });
         }
         public BackupInfos GetBackupJob(int index)
         {
             return BackupJobs[index].GetBackupInfos();
         }
-        public List<BackupInfos> GetAllBackups()
+
+        public List<BackupInfos> GetBackupJobs()
         {
-            List<BackupInfos> BackupInfosList = new List<BackupInfos>();
-            foreach (var job in BackupJobs)
+            List<BackupInfos> Grid = new List<BackupInfos> { };
+            for (int i = 0; i < BackupJobs.Count; i++)
             {
-                BackupInfosList.Add(job.GetBackupInfos());
+                Grid.Add(BackupJobs[i].GetBackupInfos());
             }
-            return BackupInfosList;
+            return Grid;
         }
+
+
         public Boolean IsNameValid(string? name)
         {
             return !string.IsNullOrEmpty(name);
@@ -72,18 +84,27 @@ namespace AppCore.Model.TCPInteractions
 
         public async void RunSpecificBackup(int index)
         {
-        }
-        public async void RunAllBackups()
-        {
-        }
-        static string GetEnumDescription(Enum value)
-        {
-            var fieldInfo = value.GetType().GetField(value.ToString());
-            var attributes = (System.ComponentModel.DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false);
-            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
+            await Task.Run(() =>
+            {
+                BackupJobs[index].StartBackup();
+                History.WriteHistory(BackupJobs[index]);
+            });
         }
 
-        public static string GetEnumValues()
+        public async void RunAllBackups()
+        {
+            await Task.Run(() =>
+            {
+                List<BackupJob> backupJobsCopy = BackupJobs.ToList();
+                foreach (BackupJob backup in backupJobsCopy)
+                {
+                    backup.StartBackup();
+                    History.WriteHistory(backup);
+                }
+            });
+        }
+
+        public string GetEnumValues()
         {
             StringBuilder sb = new StringBuilder();
 
@@ -96,19 +117,9 @@ namespace AppCore.Model.TCPInteractions
 
             return sb.ToString();
         }
-        public static BackupEnum GetBackupTypeByIndex(int index)
+        public BackupEnum GetBackupTypeByIndex(int index)
         {
             return (BackupEnum)Enum.ToObject(typeof(BackupEnum), index);
-        }
-
-        internal object GetBackupsNames()
-        {
-            List<string> names = new List<string>();
-            foreach (var job in BackupJobs)
-            {
-                names.Add(job.ToString());
-            }
-            return names;
         }
     }
 }

@@ -43,18 +43,6 @@ namespace AppCore.Model.Backup
         }
 
         public BackupJob() { }
-        public string Name
-        {
-            get => _name; set => _name = value;
-        }
-        public string SourceDirectory
-        {
-            get => _sourceDirectory; set => _sourceDirectory = value;
-        }
-        public string TargetDirectory
-        {
-            get => _targetDirectory; set => _targetDirectory = value;
-        }
 
         public BackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
@@ -104,8 +92,7 @@ namespace AppCore.Model.Backup
         }
         public BackupInfos GetBackupInfos()
         {
-            //TEMP : index value is temporary
-            return new BackupInfos(_name, _sourceDirectory, _targetDirectory, Enum.GetName(Type), 0);
+            return new BackupInfos(_name, _sourceDirectory, _targetDirectory, Enum.GetName(Type));
         }
         public async Task AsyncDoBackup()
         {

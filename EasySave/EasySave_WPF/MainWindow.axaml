@@ -98,7 +98,7 @@
 		<TabControl>
 			<TabItem Grid.Column="0">
 				<TabItem.Header>
-					<TextBlock>🏠 </TextBlock>
+                  <TextBlock>🏠 </TextBlock>
 				</TabItem.Header>
 				<DataGrid Name="Principal" Margin="10" Grid.Row="0" Background="White" HorizontalAlignment="Center">
 					<DataGrid.Columns>

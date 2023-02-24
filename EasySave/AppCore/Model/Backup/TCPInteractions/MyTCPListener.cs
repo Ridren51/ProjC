@@ -9,6 +9,7 @@ using System.IO;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
+using AppCore.Model.Backup;
 
 namespace AppCore.Model.TCPInteractions
 {
@@ -39,11 +40,11 @@ namespace AppCore.Model.TCPInteractions
                 // Enter the listening loop.
                 while (true)
                 {
-                    //Console.Write("Waiting for a connection... ");
+                    System.Diagnostics.Debug.Write("Waiting for a connection... ");
 
                     // Perform a blocking call to accept requests.
                     using TcpClient client = server.AcceptTcpClient();
-                    //Console.WriteLine("Connected!");
+                    System.Diagnostics.Debug.WriteLine("Connected!");
 
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
@@ -63,7 +64,7 @@ namespace AppCore.Model.TCPInteractions
                                 if (data is string)
                                 {
                                     //Console.WriteLine("Received on server: {0}", (string)data);
-                                    ProcessRequest(((string)data).Split(':'), stream);
+                                    ProcessRequest(((string)data).Split(';'), stream);
                                 }
                             }
                             catch (Exception e)
@@ -96,10 +97,40 @@ namespace AppCore.Model.TCPInteractions
         {
             switch (request[0])
             {
-                case "RunBackups":
+                case "AddBackupJob":
                 {
-                    requestHandler.RunAllBackups();
-                    SendResponse("All backups are running", stream);
+                    BackupEnum backupType = (request[4] == "Differential")? BackupEnum.Differential : BackupEnum.Full;
+                    requestHandler.AddBackupJob(request[1], request[2], request[3], backupType);
+                    break;
+                }
+                case "PauseBackup":
+                {
+                    requestHandler.PauseBackup(Int32.Parse(request[1]));
+                    break;
+                }
+                case "ResumeBackup":
+                {
+                    requestHandler.ResumeBackup(Int32.Parse(request[1]));
+                    break;
+                }
+                case "IsBackupQueueFull":
+                {
+                    SendResponse(requestHandler.IsBackupQueueFull(), stream);
+                    break;
+                }
+                case "RemoveBackupJob":
+                {
+                    requestHandler.RemoveBackupJob(Int32.Parse(request[1]));
+                    break;
+                }
+                case "GetBackupJob":
+                {
+                    SendResponse(requestHandler.GetBackupJob(Int32.Parse(request[1])), stream);
+                    break;
+                }
+                case "GetBackupJobs":
+                {
+                    SendResponse(requestHandler.GetBackupJobs(), stream);
                     break;
                 }
                 case "RunSpecificBackup":
@@ -107,40 +138,29 @@ namespace AppCore.Model.TCPInteractions
                     requestHandler.RunSpecificBackup(Int32.Parse(request[1]));
                     break;
                 }
-                case "AddBackupJob":
+                case "RunAllBackups":
                 {
-                    requestHandler.AddBackupJob(request[1], request[2], request[3], request[4]);
+                    requestHandler.RunAllBackups();
                     break;
                 }
-                case "DeleteBackupJob":
+                case "IsNameValid":
                 {
-                    requestHandler.RemoveBackupJob(Int32.Parse(request[1]));
+                    SendResponse(requestHandler.IsNameValid(request[1]), stream);
                     break;
                 }
-                case "GetAllBackups":
+                case "IsDirectoryValid":
                 {
-                    SendResponse(requestHandler.GetAllBackups(), stream);
+                    SendResponse(requestHandler.IsDirectoryValid(request[1]), stream);
                     break;
                 }
-                case "RestoreBackup":
+                case "GetEnumValues":
                 {
+                    SendResponse(requestHandler.GetEnumValues(), stream);
                     break;
                 }
-                case "GetBackupQueue":
+                case "GetBackupTypeByIndex":
                 {
-                    break;
-                }
-                case "SetLogTime":
-                {
-                    break;
-                }
-                case "GetLogTime":
-                {
-                    break;
-                }
-                case "GetBackupsNames":
-                {
-                    SendResponse(requestHandler.GetBackupsNames(), stream);
+                    SendResponse(requestHandler.GetBackupTypeByIndex(Int32.Parse(request[1])), stream);
                     break;
                 }
                 default:

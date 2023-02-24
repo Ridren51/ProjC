@@ -1,4 +1,5 @@
 ﻿using AppCore.Model;
+using AppCore.Model.Backup;
 using System;
 using System.IO;
 using System.Net.Sockets;
@@ -19,8 +20,7 @@ namespace AppCore.Model.TCPInteractions
                 Client = new TcpClient();
                 // Connect the client to the TCP Listener
                 Client.Connect("127.0.0.1", 23805);
-
-                //Console.WriteLine("Connected to server!");
+                System.Diagnostics.Debug.WriteLine("Connected to server!");
             }
             catch (SocketException e)
             {
@@ -28,8 +28,9 @@ namespace AppCore.Model.TCPInteractions
             }
         }
 
-        public void SendRequest(string? request)
+        public object? SendRequest(string? request)
         {
+            object? response = null;
             try
             {
                 if (Client != null && Client.Connected)
@@ -40,7 +41,7 @@ namespace AppCore.Model.TCPInteractions
                     if (request == "quit")
                     {
                         Client.Close();
-                        return;
+                        return response;
                     }
 
                     // Get the stream to send data to the server
@@ -54,13 +55,14 @@ namespace AppCore.Model.TCPInteractions
                     //Console.WriteLine("Sent: {0}", request);
 
                     // Get a response from the server
-                    GetResponse(stream, request.Split(':'));
+                    response = GetResponse(stream, request.Split(';'));
                 }
             }
             catch (SocketException e)
             {
                 Console.WriteLine("SocketException: {0}", e);
             }
+            return response;
         }
 
         private object? GetResponse(NetworkStream stream, string[] request)
@@ -68,28 +70,25 @@ namespace AppCore.Model.TCPInteractions
             object? responseFromServer = null;
             switch (request[0])
             {
-                case "RunBackups":
+                case "IsBackupQueueFull":
                 {
-                    responseFromServer = WaitForResponse(stream, typeof(string));
-                    if (responseFromServer is string)
+                    object isFull = WaitForResponse(stream, typeof(Boolean));
+                    if (isFull is Boolean)
                     {
-                        //Console.WriteLine("Received on client : " + responseFromServer);
+                        responseFromServer = isFull;
                     }
                     break;
                 }
-                case "RunSpecificBackup":
+                case "GetBackupJob":
                 {
+                    object backup = WaitForResponse(stream, typeof(List<BackupInfos>));
+                    if (backup is BackupInfos)
+                    {
+                        responseFromServer = backup;
+                    }
                     break;
                 }
-                case "AddBackupJob":
-                {
-                    break;
-                }
-                case "DeleteBackupJob":
-                {
-                    break;
-                }
-                case "GetAllBackups":
+                case "GetBackupJobs":
                 {
                     object listOfBackups = WaitForResponse(stream, typeof(List<BackupInfos>));
                     if (listOfBackups is List<BackupInfos>)
@@ -98,16 +97,39 @@ namespace AppCore.Model.TCPInteractions
                     }
                     break;
                 }
-                case "RestoreBackup":
+                case "IsNameValid":
                 {
+                    object isValid = WaitForResponse(stream, typeof(Boolean));
+                    if (isValid is Boolean)
+                    {
+                        responseFromServer = isValid;
+                    }
                     break;
                 }
-                case "GetBackupsNames":
+                case "IsDirectoryValid":
                 {
-                    object listOfBackupNames = WaitForResponse(stream, typeof(List<string>));
-                    if (listOfBackupNames is List<string>)
+                    object isValid = WaitForResponse(stream, typeof(Boolean));
+                    if (isValid is Boolean)
                     {
-                        responseFromServer = listOfBackupNames;
+                        responseFromServer = isValid;
+                    }
+                    break;
+                }
+                case "GetEnumValues":
+                {
+                    object enumValues = WaitForResponse(stream, typeof(string));
+                    if (enumValues is string)
+                    {
+                        responseFromServer = enumValues;
+                    }
+                    break;
+                }
+                case "GetBackupTypeByIndex":
+                {
+                    object backupType = WaitForResponse(stream, typeof(BackupEnum));
+                    if (backupType is BackupEnum)
+                    {
+                        responseFromServer = backupType;
                     }
                     break;
                 }
