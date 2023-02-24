@@ -51,8 +51,7 @@
 		<Button Name="Resume" Click="ResumeBackup" Grid.Row="0" Grid.Column="6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Width="35" Height="35" Margin="10" CornerRadius="10">
 			<Image Width="35" Height="35">\Content\Resume.png</Image>
 		</Button>
-		<Button Name="Sync" Click="LogsGrid" Grid.Row="0" Grid.Column="7" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="" Width="35" Height="35" Margin="10" CornerRadius="10">
-			<Image Width="35" Height="35">\Content\Pause.png</Image>
+		<Button Name="Sync" Click="LogsGrid" Grid.Row="0" Grid.Column="7" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="🔄 " Width="35" Height="35" Margin="10" CornerRadius="10">
 		</Button>
 		<Button Grid.Row="0" Grid.Column="8" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Width="35" Height="35" Margin="10" CornerRadius="10">
 			<Image Width="35" Height="35">\Content\Gear.png</Image>
