@@ -44,6 +44,19 @@ namespace AppCore.Model.Backup
 
         public BackupJob() { }
 
+        public string Name
+        {
+            get => _name; set => _name = value;
+        }
+        public string SourceDirectory
+        {
+            get => _sourceDirectory; set => _sourceDirectory = value;
+        }
+        public string TargetDirectory
+        {
+            get => _targetDirectory; set => _targetDirectory = value;
+        }
+
         public BackupJob(string name, string sourceDirectory, string targetDirectory, BackupEnum type)
         {
             _name = name;
@@ -131,15 +144,15 @@ namespace AppCore.Model.Backup
                 try
                 {
                     _pauseEvent.WaitOne();
-                    bool shouldCryptFile = _extensionToCrypt.Contains(file.Extension);
+                    //bool shouldCryptFile = _extensionToCrypt.Contains(file.Extension);
                     if (isComplete && File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)))
-                        CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
+                        CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
                     else
                     {
                         if (File.Exists(GetFileSourcePath(sourceDirectoryInfo, targetDirectoryInfo, file)) != File.Exists(GetFileTargetPath(sourceDirectoryInfo, targetDirectoryInfo, file)))
-                            CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
+                            CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
                         else if (!CompareHash(sourceDirectoryInfo, targetDirectoryInfo, file))
-                            CopyDirectory(_sourceDirectory, _targetDirectory, file.Name, shouldCryptFile);
+                            CopyDirectory(_sourceDirectory, _targetDirectory, file.Name);
                     }
                 }finally
                 {
