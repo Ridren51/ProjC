@@ -28,6 +28,7 @@
 			<ColumnDefinition Width="Auto"></ColumnDefinition>
 			<ColumnDefinition Width="Auto"></ColumnDefinition>
 			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
 			<ColumnDefinition Width="*"></ColumnDefinition>
 			<ColumnDefinition Width="Auto"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
@@ -37,16 +38,19 @@
 		<Panel Margin="10" Grid.Row="0" Grid.Column="0">
 			<Image Width="100" Height="40">\Content\Logo.png</Image>
 		</Panel>
-		<Button Click="Play" Grid.Row="0" Grid.Column="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content=" "  Width="35" Height="35" Margin="10" CornerRadius="10">
+		<Button Name="Play" Click="PlayBackup" Grid.Row="0" Grid.Column="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content=" "  Width="35" Height="35" Margin="10" CornerRadius="10">
 			<Image Width="35" Height="35">\Content\Play.png</Image>
 		</Button>
 		<Button Name="Delete" Click="DeleteBackup" Grid.Row="0" Grid.Column="4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content=" "  Width="35" Height="35" Margin="10" CornerRadius="10">
 			<Image Width="35" Height="35">\Content\Stop.png</Image>
 		</Button>
-		<Button Grid.Row="0" Grid.Column="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="" Width="35" Height="35" Margin="10" CornerRadius="10">
+		<Button Name="Pause" Click="PauseBackup" Grid.Row="0" Grid.Column="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="" Width="35" Height="35" Margin="10" CornerRadius="10">
 			<Image Width="35" Height="35">\Content\Pause.png</Image>
 		</Button>
-		<Button Grid.Row="0" Grid.Column="7" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"  Content=""  Width="35" Height="35" Margin="10" CornerRadius="10">
+		<Button Name="Resume" Click="ResumeBackup" Grid.Row="0" Grid.Column="6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Content="⏩ " Width="35" Height="35" Margin="10" CornerRadius="10">
+			<Image Width="35" Height="35">\Content\Resume.png</Image>
+		</Button>
+		<Button Grid.Row="0" Grid.Column="8" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"  Content=""  Width="35" Height="35" Margin="10" CornerRadius="10">
 			<Image  Width="35" Height="35">\Content\Gear.png</Image>
 			<Button.Flyout>
 				<Flyout Placement="Bottom">

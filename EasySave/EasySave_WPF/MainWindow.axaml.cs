@@ -56,7 +56,7 @@ public partial class MainWindow : Window
 
 
 
-    private void Play(object sender, RoutedEventArgs e)
+    private void PlayBackup(object sender, RoutedEventArgs e)
     {
         var backupJobs = CellClick();
         for (int i = 0; i < backupJobs.Count; i++)
@@ -65,7 +65,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void Pause(object sender, RoutedEventArgs e)
+    private void PauseBackup(object sender, RoutedEventArgs e)
     {
         var backupJobs = CellClick();
         if (Principal.SelectedItem != null)
@@ -75,7 +75,7 @@ public partial class MainWindow : Window
         this.Principal.Items = Adapt.GetBackupInfos();
     }
 
-    private void Resume(object sender, RoutedEventArgs e)
+    private void ResumeBackup(object sender, RoutedEventArgs e)
     {
         var backupJobs = CellClick();
         if (Principal.SelectedItem != null)
